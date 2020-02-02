@@ -23,7 +23,7 @@ scripts = soup.find_all('script')
 
 teamsData = utils.parse_scripts_to_dict(scripts, 'teamsData')
 datesData = utils.parse_scripts_to_dict(scripts, 'datesData')
-playersData = utils.parse_scripts_to_dict(scripts, 'playersData')
+# playersData = utils.parse_scripts_to_dict(scripts, 'playersData')
 # teamsData = json.loads(json_teamsData)
 teams = utils.get_all_team_names(teamsData)
 
@@ -31,10 +31,6 @@ all_teams_history = utils.get_team_name_history_dict(teamsData)
 
 print("\nDates Data")
 for k, v in datesData[5].items():
-    print(k, v)
-
-print("\nPlayers Data")
-for k, v in playersData[5].items():
     print(k, v)
 
 print("\nTeams Data")

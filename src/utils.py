@@ -57,7 +57,9 @@ def parse_scripts_to_dict(scripts, variable_name):
     start_index = string_json_obj.index("('") + 2
     end_index = string_json_obj.index("')")
 
+    print(string_json_obj)
     data_json = string_json_obj[start_index:end_index]
+    print()
     data_json = data_json.encode('utf8').decode('unicode-escape')
 
     data = json.loads(data_json)
