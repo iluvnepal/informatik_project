@@ -25,16 +25,17 @@ teamsData = utils.parse_scripts_to_dict(scripts, 'teamsData')
 datesData = utils.parse_scripts_to_dict(scripts, 'datesData')
 # playersData = utils.parse_scripts_to_dict(scripts, 'playersData')
 # teamsData = json.loads(json_teamsData)
-teams = utils.get_all_team_names(teamsData)
 
 all_teams_history = utils.get_team_name_history_dict(teamsData)
 
+all_matches_stats = utils.get_all_matches_history(datesData, teamsData)
+
 print("\nDates Data")
-for k, v in datesData[5].items():
+for k, v in datesData[0].items():
     print(k, v)
 
 print("\nTeams Data")
-for k, v in teamsData.items():
+for k, v in all_teams_history[0].items():
     for item in v.items():
         print(item)
     break
