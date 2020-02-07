@@ -28,16 +28,8 @@ datesData = utils.parse_scripts_to_dict(scripts, 'datesData')
 
 all_teams_history = utils.get_team_name_history_dict(teamsData)
 
-all_matches_stats = utils.get_all_matches_history(datesData, teamsData)
+all_matches_stats, training_datas = utils.get_all_matches_history(datesData, teamsData)
 
-print("\nDates Data")
-for k, v in datesData[0].items():
-    print(k, v)
-
-print("\nTeams Data")
-for k, v in all_teams_history[0].items():
-    for item in v.items():
-        print(item)
-    break
-
+for input_array in training_datas[0:10]:
+    print(input.label)
 

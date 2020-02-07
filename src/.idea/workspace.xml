@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1ee5fb98-8ebe-476b-8318-e99ce0b78f1a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../javascript/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../javascript/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../javascript/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../javascript/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../javascript/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../javascript/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../javascript/scrapper.js" beforeDir="false" afterPath="$PROJECT_DIR$/../javascript/scrapper.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../javascript/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/../javascript/test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Training_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_examples/data.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data_examples/data.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
@@ -24,8 +20,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -137,6 +133,7 @@
       <updated>1576945123504</updated>
       <workItem from="1580572838670" duration="5676000" />
       <workItem from="1580675825077" duration="6365000" />
+      <workItem from="1581012517853" duration="7279000" />
     </task>
     <servers />
   </component>
@@ -158,21 +155,16 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/utils.py</url>
-          <line>74</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="dates_data[0]['h']['id']" language="Python" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1580682499504" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1581018664491" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

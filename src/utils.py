@@ -1,14 +1,12 @@
 import collections
+from typing import List
+
+from Training_data import TrainingData
+
+'''Returns team_id, team_name dict.'''
 
 
-def get_team_id(team_name, teams):
-    for id, name in teams.items():
-        if name == team_name:
-            return id
-    return None
-
-
-def get_all_team_names(data):
+def get_id_teamname_dict(data):
     all_teams = {}
     for team_id, team_data in data.items():
         all_teams[team_id] = team_data['title']
@@ -16,13 +14,17 @@ def get_all_team_names(data):
     return all_teams
 
 
-def flatten_and_normalise_dict(history_dict, parent_key=''):
-    '''Returns all game historys of a team as a simple dict by flattening inner dictionaries recursively.'''
+'''
+Flattens nested dict.
+'''
+
+
+def flatten_nested_dict(nested_dict, parent_key=''):
     items = []
-    for k, v in history_dict.items():
+    for k, v in nested_dict.items():
         new_key = parent_key + "_" + k if parent_key else k
         if isinstance(v, collections.MutableMapping):
-            items.extend(flatten_and_normalise_dict(v, new_key).items())
+            items.extend(flatten_nested_dict(v, new_key).items())
         else:
             if k == 'h_a':
                 v = 1 if v == 'h' else 0
@@ -31,31 +33,44 @@ def flatten_and_normalise_dict(history_dict, parent_key=''):
     return dict(items)
 
 
+'''
+Extracts all matches played by all teams in a league.
+'''
+
+
 def get_team_name_history_dict(data):
-    all_teams = get_all_team_names(data)
+    all_teams = get_id_teamname_dict(data)
     teams_history = {}
-    for id, title in all_teams.items():
-        history_list = data[id]['history']
+    for team_id, title in all_teams.items():
+        history_list = data[team_id]['history']
         history_flat = []
         for entry in history_list:
-            flattened_dict = flatten_and_normalise_dict(entry)
-            flattened_dict['id'] = id
+            flattened_dict = flatten_nested_dict(entry)
+            flattened_dict['id'] = team_id
             history_flat.append(flattened_dict)
 
-        teams_history[id] = history_flat
-        # teams_history[title] = history_flat
+        teams_history[team_id] = history_flat
 
     return dict(teams_history)
 
+
 def get_all_matches_history(dates_data, teams_data):
     team_name_history_dict = get_team_name_history_dict(teams_data)
+    id_name = get_id_teamname_dict(teams_data)
     all_matches = []
+    training_data: List[TrainingData] = []
     for match in dates_data:
+        from datetime import datetime
         h_team_id = match['h']['id']
         a_team_id = match['a']['id']
         date_played = match['datetime']
         h_team_stats = {}
         a_team_stats = {}
+
+        played_date = datetime.strptime(date_played, '%Y-%m-%d %H:%M:%S')
+        if played_date > datetime.today():
+            continue
+
         for match_stat in team_name_history_dict[h_team_id]:
             if match_stat['date'] == date_played:
                 h_team_stats = match_stat
@@ -65,21 +80,18 @@ def get_all_matches_history(dates_data, teams_data):
                 a_team_stats = match_stat
                 break
 
-        match_data = {h_team_id: h_team_stats,
-                      a_team_id: a_team_stats,
-                      date_played: date_played,
-                      'h_goals': match['goals']['h'],
-                      'a_goals': match['goals']['a']}
-        all_matches.append(match_data)
-    # todo the match stats of opponent team is also in the team-match stat. trim the training data.
-    return all_matches
+        h_team_stats['xpts_a'] = a_team_stats['xpts']
+        training_data.append(TrainingData(h_team_stats))
+        all_matches.append(h_team_stats)
+
+    return all_matches, training_data
 
 
+'''extracts a script where variable_name is assigned with a value.
+Returns a python list'''
 
 
 def parse_scripts_to_dict(scripts, variable_name):
-    '''extracts a script where variable_name is assigned with a value.
-    Returns a python list'''
     import json
     string_json_obj = ''
     for element in scripts:
