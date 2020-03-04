@@ -1,0 +1,96 @@
+[Tabs]
+For C#m:
+E|-----0-----0-------0-----0-------|
+B|-------0-------------0-----0-----|
+G|---6-----6---0---6-----6---------|
+D|---------------------------------|
+A|-4-------------4-----------------|
+E|---------------------------------|
+
+For A:
+
+E|-----0-----0-------0-----0-------|
+B|-------0-------------0-----0-----|
+G|---6-----6---0---6-----6---------|
+D|---------------------------------|
+A|---------------------------------|
+E|--5------------5-----------------|
+
+[Intro]
+C#m      A          x 4 times
+
+[Verse 1]
+        C#m      A
+ hera mero, aakhama
+C#m                A
+ tasbir timrai paaunechau
+       C#m       A
+ khoja timi aafu vitra
+C#m                   A
+ sadhai malai nai paaunechau
+      C#m              A
+ aasu jharcha fijauda mutu
+       C#m             A
+ tyo aasu lai bujhne timinai hau
+
+
+[Bridge]
+E    F#m        A        B
+ timima nai cha mera sara khusi
+E    F#m        A        B
+ timima nai cha mera sara sapana
+
+
+[Chorus]
+      C#m  A  B         C#m   A      B
+ mero la - gi swarga ko aar - tha
+      C#m   A  B     C#m A      B
+ matra ti - mi, timi nai hau....
+
+
+[Verse 2]
+           C#m            A
+ samaya sangai, badlincha mausam
+C#m             A
+ tara timi nabadlinu
+
+        C#m                 A
+ dukhayechu vane tyo timro mana
+C#m             A
+ maaf malai garidinu..
+
+        C#m       A
+ harek jiwan jiunalai
+       C#m                 A
+ saath chahincha tyo sathi timi nai hau..
+
+
+[Bridge]
+E    F#m        A        B
+ timima nai cha mera sara khusi
+E    F#m        A        B
+ timima nai cha mera sara sapana
+
+
+[Chorus]
+      C#m  A  B         C#m   A      B
+ mero la - gi swarga ko aar - tha
+      C#m   A  B     C#m A      B
+ matra ti - mi, timi nai hau....
+
+
+[Chorus]
+       C#m  A  B         C#m   A      B
+ mero la - gi swarga ko aar - tha
+      C#m   A  B     C#m A      B
+ matra ti - mi, timi nai hau....
+
+[Solo]
+C#m   A  B     C#m A      B
+C#m   A  B     C#m A      B
+C#m   A  B     C#m A      B
+C#m   A  B     C#m A      B
+
+Strum each chord once.
+[Outro]
+C#m   A  B

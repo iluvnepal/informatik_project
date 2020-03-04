@@ -40,15 +40,12 @@ class TrainingData:
         self.ppda_defense_away_team = match_stat['ppda_allowed_def']
         self.deep_passes = match_stat['deep']
         self.deep_passes_away_team = match_stat['deep_allowed']
-        self.scored = match_stat['scored']
-        self.scored_away_team = match_stat['missed']
         self.expected_points = match_stat['xpts']
         self.expected_points_away_team = match_stat['xpts_a']
-
-        self.label = [self.scored, self.scored_away_team]
+        self.label = [match_stat['scored'], match_stat['missed']]
 
     def get_input(self):
-        training_dict = self.__dict__
+        training_dict = self.__dict__.copy()
         training_dict.pop('label')
         return training_dict.values()
 

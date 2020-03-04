@@ -58,7 +58,7 @@ def get_all_matches_history(dates_data, teams_data):
     team_name_history_dict = get_team_name_history_dict(teams_data)
     id_name = get_id_teamname_dict(teams_data)
     all_matches = []
-    training_data: List[TrainingData] = []
+    training_data = []
     for match in dates_data:
         from datetime import datetime
         h_team_id = match['h']['id']
@@ -80,6 +80,9 @@ def get_all_matches_history(dates_data, teams_data):
                 a_team_stats = match_stat
                 break
 
+        if len(a_team_stats.values()) == 0:
+            continue
+
         h_team_stats['xpts_a'] = a_team_stats['xpts']
         training_data.append(TrainingData(h_team_stats))
         all_matches.append(h_team_stats)
@@ -97,6 +100,7 @@ def parse_scripts_to_dict(scripts, variable_name):
     for element in scripts:
         if variable_name in element.text:
             string_json_obj = element.text.strip()
+            break
 
     start_index = string_json_obj.index("('") + 2
     end_index = string_json_obj.index("')")
