@@ -2,10 +2,83 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1ee5fb98-8ebe-476b-8318-e99ce0b78f1a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../.idea/informatik_project.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/artifacts/PredictionService_war_exploded.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_11_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_11_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_11_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__com_google_code_gson_gson_2_8_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__com_shapesecurity_salvation2_3_0_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__com_thoughtworks_qdox_qdox_2_0_M8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__commons_codec_commons_codec_1_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__commons_io_commons_io_2_8_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__commons_logging_commons_logging_1_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__commons_net_commons_net_3_7_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__net_sourceforge_htmlunit_htmlunit_2_44_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__net_sourceforge_htmlunit_htmlunit_core_js_2_44_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__net_sourceforge_htmlunit_htmlunit_cssparser_1_6_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__net_sourceforge_htmlunit_neko_htmlunit_2_44_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_commons_commons_lang3_3_11.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_commons_commons_text_1_9.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_13.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_httpcomponents_httpmime_4_5_12.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_aether_provider_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_artifact_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_core_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_model_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_model_builder_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_plugin_api_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_repository_metadata_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_settings_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_maven_settings_builder_3_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_plugins_maven_compiler_plugin_3_8_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_shared_maven_shared_incremental_1_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_apache_maven_shared_maven_shared_utils_3_2_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_brotli_dec_0_1_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_codehaus_plexus_plexus_classworlds_2_2_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_codehaus_plexus_plexus_compiler_api_2_8_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_codehaus_plexus_plexus_compiler_javac_2_8_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_codehaus_plexus_plexus_compiler_manager_2_8_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_codehaus_plexus_plexus_component_annotations_1_5_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_codehaus_plexus_plexus_interpolation_1_14.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_codehaus_plexus_plexus_java_0_9_10.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_codehaus_plexus_plexus_utils_2_0_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_eclipse_jetty_jetty_client_9_4_32_v20200930.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_eclipse_jetty_jetty_http_9_4_32_v20200930.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_eclipse_jetty_jetty_io_9_4_32_v20200930.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_eclipse_jetty_jetty_util_9_4_32_v20200930.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_eclipse_jetty_jetty_xml_9_4_32_v20200930.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_api_9_4_32_v20200930.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_client_9_4_32_v20200930.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_eclipse_jetty_websocket_websocket_common_9_4_32_v20200930.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_ow2_asm_asm_6_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_aether_aether_api_1_7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_aether_aether_impl_1_7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_aether_aether_spi_1_7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_aether_aether_util_1_7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_plexus_plexus_cipher_1_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_plexus_plexus_sec_dispatcher_1_3.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_sisu_sisu_guice_noaop_2_1_7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_sisu_sisu_inject_bean_1_4_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__org_sonatype_sisu_sisu_inject_plexus_1_4_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__xalan_serializer_2_7_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__xalan_xalan_2_7_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__xerces_xercesImpl_2_12_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/libraries/Maven__xml_apis_xml_apis_1_4_01.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/PredictionService.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/src/main/java/common/entity/MatchHistory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PredictionService/src/main/java/common/util/UnderstatDataParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Training_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Training_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bla.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/training_data.csv" beforeDir="false" afterPath="$PROJECT_DIR$/training_data.csv" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -141,6 +214,8 @@
       <workItem from="1581074729116" duration="4315000" />
       <workItem from="1582821596175" duration="4740000" />
       <workItem from="1582906716321" duration="6422000" />
+      <workItem from="1604415042526" duration="2638000" />
+      <workItem from="1604504366918" duration="1465000" />
     </task>
     <servers />
   </component>
@@ -173,16 +248,22 @@
           <line>48</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>33</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="element.values()" language="Python" />
         <watch expression="datetime.today()" language="Python" />
+        <watch expression="len(datesData)" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1582827488683" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/src$main.coverage" NAME="main Coverage Results" MODIFIED="1604416231795" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
