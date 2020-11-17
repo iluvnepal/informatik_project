@@ -1,4 +1,4 @@
-package common.entity;
+package org.thepanday.informatikproject.common.entity;
 
 import java.util.ArrayList;
 import java.util.List;

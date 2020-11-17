@@ -1,17 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// Created by Kshitiz on 04.11.2020.
+// Created by Kshitiz on 17.11.2020.
 //
 // Copyright (c) 2006 - 2020 FORCAM GmbH. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-package common.entity;
+package org.thepanday.informatikproject.restapi.entity;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  */
-public class MatchHistory {
-    private Boolean mIsHomeGame;
-    private int mGoalsScored;
-    private int mGoalsConceived;
+@Getter
+@Setter
+public class WebResponse {
+    private String message;
 }

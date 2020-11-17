@@ -5,7 +5,7 @@
 // Copyright (c) 2006 - 2020 FORCAM GmbH. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-package common.util;
+package org.thepanday.informatikproject.common.util;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -13,7 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import common.entity.TeamData;
+import org.thepanday.informatikproject.common.entity.TeamData;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class UnderstatDataParser {
     private static final String[] YEARS = { "2014", "2015", "2016", "2017", "2018", "2019" };
     private static final String TEAMS_DATA_STRING = "var teamsData = JSON.parse('";
 
-    public void create_team_data() {
+    public void createTeamData() {
         try {
             String fromFile = Files.readString(Paths.get("try_data.txt"), StandardCharsets.US_ASCII);
             final ArrayList<TeamData> allTeamDataFromLeaugeYear = new ArrayList<>();

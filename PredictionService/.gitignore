@@ -1,3 +1,5 @@
 .gitignore
-.idea
 PredictionService.iml
+/.idea/
+/.idea/libraries/
+
