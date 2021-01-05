@@ -8,34 +8,29 @@
 package common.entity;
 
 import com.google.gson.JsonElement;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class MatchHistory {
-    private static final Logger LOGGER = Logger.getLogger(MatchHistory.class.getName());
-
-    private final String[] HISTORY_COLUMNS = { "h_a", "xG", "xGA", "npxG", "npxGA", "ppda_att", "ppda_def", "ppda_allowed_att", "ppda_allowed_def", "deep",
-                                               "deep_allowed", "scored", "missed", "xpts", "result", "date", "wins", "draws", "loses", "pts", "npxGD" };
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private boolean mIsHomeGame;
     private int mGoalsScored;
     private int mGoalsConceived;
 
-    private final Set<Map.Entry<String, JsonElement>> mHistoryMap;
-
     public MatchHistory(Set<Map.Entry<String, JsonElement>> singleMatchHistoryMap) {
-        this.mHistoryMap = singleMatchHistoryMap;
         init(singleMatchHistoryMap);
     }
 
     private void init(Set<Map.Entry<String, JsonElement>> singleMatchHistoryMap) {
-        if (mHistoryMap.isEmpty()) {
-            LOGGER.warning("History Map empty");
+        if (singleMatchHistoryMap.isEmpty()) {
+            LOGGER.warn("History Map empty");
             return;
         }
 
@@ -82,7 +77,7 @@ public class MatchHistory {
                     return statName;
                 }
             }
-            LOGGER.warning("The given column name: " + columnName + ", does not represent any match stat available.");
+            //            LOGGER.warning("The given column name: " + columnName + ", does not represent any match stat available.");
             return null;
         }
 

@@ -4,32 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Contains all the match data for a team.
+ */
 public class TeamData {
     public String mId;
     public String mTeamName;
     public List<MatchHistory> mTeamMatchesHistory = new ArrayList();
 
-    public String getmId() {
+    public String getId() {
         return mId;
     }
 
-    public void setmId(String mId) {
+    public void setId(String mId) {
+        if (mId.startsWith("\"")) {
+            mId = mId.substring(1, mId.length() - 1);
+        }
         this.mId = mId;
     }
 
-    public String getmTeamName() {
+    public String getTeamName() {
         return mTeamName;
     }
 
-    public void setmTeamName(String mTeamName) {
+    public void setTeamName(String mTeamName) {
+        if (mTeamName.startsWith("\"")) {
+            mTeamName = mTeamName.substring(1, mTeamName.length() - 1);
+        }
         this.mTeamName = mTeamName;
     }
 
-    public List<MatchHistory> getmTeamMatchesHistory() {
+    public List<MatchHistory> getTeamMatchesHistory() {
         return mTeamMatchesHistory;
     }
 
-    public void setmTeamMatchesHistory(List<MatchHistory> mTeamMatchesHistory) {
+    public void setTeamMatchesHistory(List<MatchHistory> mTeamMatchesHistory) {
         this.mTeamMatchesHistory.addAll(mTeamMatchesHistory);
     }
 

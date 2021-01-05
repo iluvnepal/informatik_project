@@ -1,18 +1,18 @@
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import common.entity.TeamData;
 import common.util.UnderstatDataParser;
-import org.apache.commons.text.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
+import java.util.Map;
 
 public class Application {
 
+    private static final Logger logger = LogManager.getLogger(Application.class);
+
     public static void main(String[] args) {
         final UnderstatDataParser understatDataParser = new UnderstatDataParser();
-        understatDataParser.create_team_data();
-//        understatDataParser.write_string_to_file();
+        // todo: create proper logger slj4 or something.
+        final Map<Integer, TeamData> teamDataFromJsonFile = understatDataParser.createTeamDataFromJsonFile("resources/Serie_A2019");
+        //                understatDataParser.scrapeTeamsDataToJsonFile();
     }
 }
