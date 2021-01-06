@@ -4,3 +4,4 @@ PredictionService.iml
 /.idea/libraries/
 target/
 
+/src/main/webapp/lib/

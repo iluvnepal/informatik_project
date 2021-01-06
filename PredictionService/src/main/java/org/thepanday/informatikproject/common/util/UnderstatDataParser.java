@@ -5,16 +5,16 @@
 // Copyright (c) 2006 - 2020 FORCAM GmbH. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-package common.util;
+package org.thepanday.informatikproject.common.util;
 
+import org.thepanday.informatikproject.common.entity.MatchHistory;
+import org.thepanday.informatikproject.common.entity.TeamData;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import common.entity.MatchHistory;
-import common.entity.TeamData;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;

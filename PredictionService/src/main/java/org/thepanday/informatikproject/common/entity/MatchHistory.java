@@ -2,7 +2,6 @@
 //
 // Created by Kshitiz on 04.11.2020.
 //
-// Copyright (c) 2006 - 2020 FORCAM GmbH. All rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
 package org.thepanday.informatikproject.common.entity;
