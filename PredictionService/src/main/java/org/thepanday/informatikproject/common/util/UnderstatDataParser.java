@@ -15,71 +15,80 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import org.apache.commons.text.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.thepanday.informatikproject.common.entity.MatchHistory;
+import org.thepanday.informatikproject.common.entity.TeamData;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class UnderstatDataParser {
 
-    private static final Logger LOGGER = Logger.getLogger(UnderstatDataParser.class.getName());
-
     private static final String BASE_URL = "https://understat.com/league";
     private static final String[] LEAGUES = { "La_liga", "EPL", "Bundesliga", "Serie_A", "Ligue_1", "RFPL" };
     private static final String[] YEARS = { "2014", "2015", "2016", "2017", "2018", "2019" };
     private static final String TEAMS_DATA_STRING = "var teamsData = JSON.parse('";
 
-    public void create_team_data() {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnderstatDataParser.class);
+
+    public Map<Integer, TeamData> mTeamDataMap = new HashMap<Integer, TeamData>();
+
+    public Map<Integer, TeamData> createTeamDataFromJsonFile(String filePath) {
         try {
-            String fromFile = Files.readString(Paths.get("try_data.txt"), StandardCharsets.US_ASCII);
-            final ArrayList<TeamData> allTeamDataFromLeaugeYear = new ArrayList<>();
+            String fromFile = Files.readString(Paths.get(filePath), StandardCharsets.US_ASCII);
             JsonObject allTeamsMatchHistories = new JsonParser()
                 .parse(fromFile)
                 .getAsJsonObject();
             for (Map.Entry<String, JsonElement> stringJsonElementEntry : allTeamsMatchHistories.entrySet()) {
                 final TeamData currentTeamData = new TeamData();
                 final JsonObject teamDataJsonObject = (JsonObject) stringJsonElementEntry.getValue();
-                currentTeamData.setmId(teamDataJsonObject
-                                           .get("id")
-                                           .toString());
-                currentTeamData.setmTeamName(teamDataJsonObject
-                                                 .get("title")
-                                                 .toString());
-                LOGGER.info("Creating team data for : " + currentTeamData.getmTeamName());
+                String id = teamDataJsonObject
+                    .get("id")
+                    .toString();
+                id = id.substring(1, id.length() - 1);
+                currentTeamData.setId(id);
+                currentTeamData.setTeamName(teamDataJsonObject
+                                                .get("title")
+                                                .toString());
+                LOGGER.info("Creating team data for : {}", currentTeamData.getTeamName());
                 JsonArray history = (JsonArray) teamDataJsonObject
                     .get("history")
                     .getAsJsonArray();
-                for (JsonElement jsonElement : history) {
-                    final Set<Map.Entry<String, JsonElement>> singleMatchHistoryMap = jsonElement
+                for (JsonElement jsonObjectWithMatchHistory : history) {
+                    final Set<Map.Entry<String, JsonElement>> singleMatchHistoryMap = jsonObjectWithMatchHistory
                         .getAsJsonObject()
                         .entrySet();
                     currentTeamData.addMatchHistory(new MatchHistory(singleMatchHistoryMap));
-                    System.out.println(jsonElement);
                 }
-
-                //todo : debug more
-
-                System.out.println(stringJsonElementEntry.getKey());
+                LOGGER.info("putting team data for : {}", currentTeamData.getTeamName());
+                this.mTeamDataMap.put(Integer.parseInt(currentTeamData.getId()), currentTeamData);
             }
-
+            LOGGER.info("collected match stats for {} teams", mTeamDataMap.size());
+        } catch (JsonSyntaxException e) {
+            LOGGER.warn("Error parsing json data file. Error cause: {}", e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (mTeamDataMap.isEmpty()) {
+            LOGGER.info("Team Data map seems to be empty");
+        }
+        return mTeamDataMap;
     }
 
     //    public void fill_team_history(JsonArray history)
 
-    public void write_string_to_file() {
+    public void scrapeTeamsDataToJsonFile() {
         WebClient client = new WebClient();
 
         client
@@ -98,7 +107,7 @@ public class UnderstatDataParser {
             for (String league : LEAGUES) {
                 for (String year : YEARS) {
                     String url = BASE_URL + "/" + league + "/" + year;
-                    String fileName = "matchesData" + league + year;
+                    String fileName = "resources/" + league + year;
 
                     page = client.getPage(url);
                     String data = StringEscapeUtils.unescapeJava(page
@@ -113,9 +122,10 @@ public class UnderstatDataParser {
                     JsonElement jsonElement = new JsonParser().parse(substring);
                     final JsonObject jsonObject = jsonElement.getAsJsonObject();
 
-                    PrintWriter out = new PrintWriter(fileName);
-                    out.println(jsonElement.toString());
-                    out.close();
+                    // write to a file
+                    //                    PrintWriter out = new PrintWriter(fileName);
+                    //                    out.println(jsonElement.toString());
+                    //                    out.close();
                 }
             }
 

@@ -1,37 +1,20 @@
 package org.thepanday.informatikproject.common.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+@Accessors(prefix = "m")
+@Getter
+@Setter
 public class TeamData {
     public String mId;
     public String mTeamName;
     public List<MatchHistory> mTeamMatchesHistory = new ArrayList();
-
-    public String getmId() {
-        return mId;
-    }
-
-    public void setmId(String mId) {
-        this.mId = mId;
-    }
-
-    public String getmTeamName() {
-        return mTeamName;
-    }
-
-    public void setmTeamName(String mTeamName) {
-        this.mTeamName = mTeamName;
-    }
-
-    public List<MatchHistory> getmTeamMatchesHistory() {
-        return mTeamMatchesHistory;
-    }
-
-    public void setmTeamMatchesHistory(List<MatchHistory> mTeamMatchesHistory) {
-        this.mTeamMatchesHistory.addAll(mTeamMatchesHistory);
-    }
 
     public void addMatchHistory(MatchHistory matchHistory) {
         if (!mTeamMatchesHistory.contains(matchHistory)) {
