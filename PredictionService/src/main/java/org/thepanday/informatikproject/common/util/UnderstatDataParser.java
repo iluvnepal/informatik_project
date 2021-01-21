@@ -7,6 +7,9 @@
 
 package org.thepanday.informatikproject.common.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gargoylesoftware.htmlunit.Page;
 import org.thepanday.informatikproject.common.entity.MatchHistory;
 import org.thepanday.informatikproject.common.entity.TeamData;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -19,10 +22,11 @@ import com.google.gson.JsonSyntaxException;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.thepanday.informatikproject.common.entity.MatchHistory;
-import org.thepanday.informatikproject.common.entity.TeamData;
+import org.thepanday.informatikproject.common.util.entity.EntryContainer;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -86,11 +90,8 @@ public class UnderstatDataParser {
         return mTeamDataMap;
     }
 
-    //    public void fill_team_history(JsonArray history)
-
-    public void scrapeTeamsDataToJsonFile() {
+    private HtmlPage getPage(String pageUrl) {
         WebClient client = new WebClient();
-
         client
             .getOptions()
             .setJavaScriptEnabled(false);
@@ -101,39 +102,61 @@ public class UnderstatDataParser {
             .getOptions()
             .setUseInsecureSSL(true);
 
-        HtmlPage page = null;
         try {
-            String url1 = BASE_URL + "/" + LEAGUES[0] + "/" + YEARS[0];
-            for (String league : LEAGUES) {
-                for (String year : YEARS) {
-                    String url = BASE_URL + "/" + league + "/" + year;
-                    String fileName = "resources/" + league + year;
-
-                    page = client.getPage(url);
-                    String data = StringEscapeUtils.unescapeJava(page
-                                                                     .asXml()
-                                                                     .replaceAll("\\\\x", "\\\\u00"));
-
-                    int start = data.indexOf(TEAMS_DATA_STRING);
-                    int end = data.indexOf("');");
-
-                    final String substring = data.substring(start + TEAMS_DATA_STRING.length(), end);
-
-                    JsonElement jsonElement = new JsonParser().parse(substring);
-                    final JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-                    // write to a file
-                    //                    PrintWriter out = new PrintWriter(fileName);
-                    //                    out.println(jsonElement.toString());
-                    //                    out.close();
-                }
-            }
-
-            //            Pattern
-            //                .compile(regex).matcher(str).replaceAll(repl)
-
+            return client.getPage(pageUrl);
         } catch (IOException e) {
+            LOGGER.error("Could not get page from URL: {}", pageUrl);
+        }
+        return null;
+    }
+
+    public EntryContainer scrapeDataToEntryContainer() {
+        for (String league : LEAGUES) {
+            for (String year : YEARS) {
+                String url = BASE_URL + "/" + league + "/" + year;
+                String fileName = "resources/" + league + year;
+
+                final HtmlPage page = this.getPage(url);
+
+                final String pageAsString = this.decodeHex(page.asXml());
+                final String dataAsJsonString = this.getTeamsDataAsJsonString(pageAsString);
+                this.writeJsonToFile(dataAsJsonString, fileName);
+                return this.toEntryContainer(dataAsJsonString);
+            }
+        }
+        return null;
+    }
+
+    private String getTeamsDataAsJsonString(final String pageAsString) {
+        int start = pageAsString.indexOf(TEAMS_DATA_STRING);
+        int end = pageAsString.indexOf("');");
+
+        return pageAsString.substring(start + TEAMS_DATA_STRING.length(), end);
+    }
+
+    private EntryContainer toEntryContainer(String jsonAsString) {
+        var o = new ObjectMapper();
+        try {
+            return o.readValue(jsonAsString, EntryContainer.class);
+        } catch (JsonProcessingException e) {
+            LOGGER.error("Could not parse json string.");
             e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private String decodeHex(final String encodedString) {
+        return StringEscapeUtils.unescapeJava(encodedString.replaceAll("\\\\x", "\\\\u00"));
+    }
+
+    private void writeJsonToFile(String jsonString, String fileName) {
+        try {
+            final PrintWriter out = new PrintWriter(fileName);
+            out.println(jsonString);
+            out.close();
+        } catch (FileNotFoundException e) {
+            LOGGER.warn("Error while creating file: {}", fileName);
         }
     }
 

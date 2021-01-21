@@ -10,42 +10,51 @@ package org.thepanday.informatikproject.application.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.thepanday.informatikproject.application.controller.entity.RequestFormDataEntity;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.thepanday.informatikproject.application.controller.form.RequestFormModel;
 
 @Controller
+@EnableWebMvc
 public class WebInterfaceController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebInterfaceController.class);
 
-    private String teamA;
-    private String teamB;
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping(value = "/")
     public ModelAndView showForm() {
-        return new ModelAndView("index", "requestFormDataEntity", new RequestFormDataEntity());
+        LOGGER.info("Get request.");
+        final ModelAndView requestForm = new ModelAndView("html/requestform");
+        requestForm.addObject("requestform", new RequestFormModel());
+        return requestForm;
     }
 
-    @PostMapping("/submitTeams")
-    public String submit(
-        @ModelAttribute("requestFormDataEntity")
-            RequestFormDataEntity formData, BindingResult result, ModelMap model) {
+    @PostMapping(value = "/submitTeams")
+    public ModelAndView submit(
+        @ModelAttribute
+            RequestFormModel formData, BindingResult result, Model model) {
+
         LOGGER.info("League: {}, TeamA: {}, TeamB: {}", formData.getLeague(), formData.getHomeTeam(), formData.getAwayTeam());
 
         if (result.hasErrors()) {
-            return "error";
+            LOGGER.warn(result
+                            .getAllErrors()
+                            .toString());
+            return new ModelAndView("error");
         }
+        ModelAndView mav = new ModelAndView("html/submittedDataView");
+        mav.addObject("formData", formData);
 
-        model.addAttribute("mLeague", formData.getLeague());
-        model.addAttribute("mHomeTeam", formData.getHomeTeam());
-        model.addAttribute("mAwayTeam", formData.getAwayTeam());
-        return "requestDataView";
+        return mav;
     }
+
+//    @GetMapping(value = "/getLeagueTeams")
+//    public String getLeagueTeams() {
+//        return Json
+//    }
 
 }
