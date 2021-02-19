@@ -11,13 +11,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+/**
+ * All details of a team. Includes team id, title and list of matches played by the team.
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "id",
     "title",
     "history"
 })
-public class Entry {
+public class TeamDetail {
 
     @JsonProperty("id")
     private String id;

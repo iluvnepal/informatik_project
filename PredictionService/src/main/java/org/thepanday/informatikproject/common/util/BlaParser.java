@@ -6,21 +6,17 @@
 
 package org.thepanday.informatikproject.common.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.text.StringEscapeUtils;
-import org.thepanday.informatikproject.common.util.entity.Entry;
-import org.thepanday.informatikproject.common.util.entity.EntryContainer;
+import org.thepanday.informatikproject.common.util.entity.TeamsContainer;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -62,10 +58,10 @@ public class BlaParser {
         content = StringEscapeUtils.unescapeJava(content.replaceAll("\\\\x", "\\\\u00"));
     }
 
-    public EntryContainer toEntry() throws IOException {
+    public TeamsContainer toEntry() throws IOException {
         String fromFile = Files.readString(Paths.get("try_data1.json"), StandardCharsets.US_ASCII);
         var o = new ObjectMapper();
-        return o.readValue(fromFile, EntryContainer.class);
+        return o.readValue(fromFile, TeamsContainer.class);
     }
 
     public static void main(String[] args) {

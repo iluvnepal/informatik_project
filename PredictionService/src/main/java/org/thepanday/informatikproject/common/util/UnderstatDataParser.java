@@ -9,85 +9,44 @@ package org.thepanday.informatikproject.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gargoylesoftware.htmlunit.Page;
-import org.thepanday.informatikproject.common.entity.MatchHistory;
+import org.apache.commons.lang3.time.StopWatch;
+import org.springframework.stereotype.Component;
 import org.thepanday.informatikproject.common.entity.TeamData;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.thepanday.informatikproject.common.util.entity.EntryContainer;
+import org.thepanday.informatikproject.common.util.entity.TeamDetail;
+import org.thepanday.informatikproject.common.util.entity.TeamsContainer;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
-/**
- *
- */
+@Component
 public class UnderstatDataParser {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnderstatDataParser.class);
+    private static final StopWatch TIMER = new StopWatch(UnderstatDataParser.class.getSimpleName());
 
     private static final String BASE_URL = "https://understat.com/league";
     private static final String[] LEAGUES = { "La_liga", "EPL", "Bundesliga", "Serie_A", "Ligue_1", "RFPL" };
-    private static final String[] YEARS = { "2014", "2015", "2016", "2017", "2018", "2019" };
+    private static final String[] YEARS = { "2014", "2015", "2016", "2017", "2018", "2019", "2020" };
     private static final String TEAMS_DATA_STRING = "var teamsData = JSON.parse('";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnderstatDataParser.class);
+    private Map<String, List<String>> leagueTeamsMap = new HashMap<>();
 
-    public Map<Integer, TeamData> mTeamDataMap = new HashMap<Integer, TeamData>();
+    public Map<Integer, TeamData> mTeamDataContainer = new HashMap<Integer, TeamData>();
 
-    public Map<Integer, TeamData> createTeamDataFromJsonFile(String filePath) {
-        try {
-            String fromFile = Files.readString(Paths.get(filePath), StandardCharsets.US_ASCII);
-            JsonObject allTeamsMatchHistories = new JsonParser()
-                .parse(fromFile)
-                .getAsJsonObject();
-            for (Map.Entry<String, JsonElement> stringJsonElementEntry : allTeamsMatchHistories.entrySet()) {
-                final TeamData currentTeamData = new TeamData();
-                final JsonObject teamDataJsonObject = (JsonObject) stringJsonElementEntry.getValue();
-                String id = teamDataJsonObject
-                    .get("id")
-                    .toString();
-                id = id.substring(1, id.length() - 1);
-                currentTeamData.setId(id);
-                currentTeamData.setTeamName(teamDataJsonObject
-                                                .get("title")
-                                                .toString());
-                LOGGER.info("Creating team data for : {}", currentTeamData.getTeamName());
-                JsonArray history = (JsonArray) teamDataJsonObject
-                    .get("history")
-                    .getAsJsonArray();
-                for (JsonElement jsonObjectWithMatchHistory : history) {
-                    final Set<Map.Entry<String, JsonElement>> singleMatchHistoryMap = jsonObjectWithMatchHistory
-                        .getAsJsonObject()
-                        .entrySet();
-                    currentTeamData.addMatchHistory(new MatchHistory(singleMatchHistoryMap));
-                }
-                LOGGER.info("putting team data for : {}", currentTeamData.getTeamName());
-                this.mTeamDataMap.put(Integer.parseInt(currentTeamData.getId()), currentTeamData);
-            }
-            LOGGER.info("collected match stats for {} teams", mTeamDataMap.size());
-        } catch (JsonSyntaxException e) {
-            LOGGER.warn("Error parsing json data file. Error cause: {}", e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (mTeamDataMap.isEmpty()) {
-            LOGGER.info("Team Data map seems to be empty");
-        }
-        return mTeamDataMap;
+    public UnderstatDataParser() {
+        this.populateLeagueTeamsMap();
     }
 
     private HtmlPage getPage(String pageUrl) {
@@ -110,21 +69,52 @@ public class UnderstatDataParser {
         return null;
     }
 
-    public EntryContainer scrapeDataToEntryContainer() {
+    public TeamsContainer scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer() {
+        TIMER.start();
+        LOGGER.info("Scraping started at: {}", new Time(TIMER.getStartTime()));
+        int historyCount = 0;
+        final TeamsContainer teamsContainer = new TeamsContainer(new HashMap<>());
         for (String league : LEAGUES) {
             for (String year : YEARS) {
                 String url = BASE_URL + "/" + league + "/" + year;
-                String fileName = "resources/" + league + year;
-
-                final HtmlPage page = this.getPage(url);
-
-                final String pageAsString = this.decodeHex(page.asXml());
-                final String dataAsJsonString = this.getTeamsDataAsJsonString(pageAsString);
-                this.writeJsonToFile(dataAsJsonString, fileName);
-                return this.toEntryContainer(dataAsJsonString);
+                final TeamsContainer containerToAdd = this.pageToTeamsDataContainer(url);
+                teamsContainer.addToEntries(containerToAdd);
             }
         }
-        return null;
+        TIMER.stop();
+        LOGGER.info("Scraping finished. Total Data Scraped : {}, time taken : {}",
+                    teamsContainer
+                        .getTeamEntries()
+                        .size(),
+                    new Time(TIMER.getTime(TimeUnit.SECONDS)));
+        TIMER.reset();
+        return teamsContainer;
+    }
+
+    private TeamsContainer pageToTeamsDataContainer(String url) {
+        final HtmlPage page = this.getPage(url);
+
+        final String pageAsString = this.decodeHex(page.asXml());
+        final String dataAsJsonString = this.getTeamsDataAsJsonString(pageAsString);
+
+        return this.jsonStringtoTeamsDataContainer(dataAsJsonString);
+    }
+
+    public void populateLeagueTeamsMap() {
+        final String year = "2020";
+        for (String league : LEAGUES) {
+            String pageUrl = BASE_URL + "/" + league + "/" + year;
+            final TeamsContainer yearTeamData = pageToTeamsDataContainer(pageUrl);
+            List<String> leagueTeams = new ArrayList<>();
+            for (Map.Entry<String, TeamDetail> idToEntry : yearTeamData
+                .getTeamEntries()
+                .entrySet()) {
+                leagueTeams.add(idToEntry
+                                    .getValue()
+                                    .getTeamName());
+            }
+            leagueTeamsMap.putIfAbsent(league, leagueTeams);
+        }
     }
 
     private String getTeamsDataAsJsonString(final String pageAsString) {
@@ -134,10 +124,10 @@ public class UnderstatDataParser {
         return pageAsString.substring(start + TEAMS_DATA_STRING.length(), end);
     }
 
-    private EntryContainer toEntryContainer(String jsonAsString) {
+    private TeamsContainer jsonStringtoTeamsDataContainer(String jsonAsString) {
         var o = new ObjectMapper();
         try {
-            return o.readValue(jsonAsString, EntryContainer.class);
+            return o.readValue(jsonAsString, TeamsContainer.class);
         } catch (JsonProcessingException e) {
             LOGGER.error("Could not parse json string.");
             e.printStackTrace();
@@ -158,6 +148,14 @@ public class UnderstatDataParser {
         } catch (FileNotFoundException e) {
             LOGGER.warn("Error while creating file: {}", fileName);
         }
+    }
+
+    public Map<String, List<String>> getLeagueTeamsMap() {
+        return leagueTeamsMap;
+    }
+
+    public String[] getLeagues() {
+        return LEAGUES;
     }
 
 }
