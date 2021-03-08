@@ -8,8 +8,6 @@ package org.thepanday.informatikproject.common.util.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Map;
 import java.util.Set;
@@ -17,8 +15,6 @@ import java.util.Set;
 /**
  * Contains team
  */
-@Getter
-@Setter
 public class TeamsContainer {
 
     public Map<String, TeamDetail> teamEntries;
@@ -53,4 +49,8 @@ public class TeamsContainer {
         }
 
     }
+
+    public Map<String, TeamDetail> getTeamEntries() {return this.teamEntries;}
+
+    public void setTeamEntries(Map<String, TeamDetail> teamEntries) {this.teamEntries = teamEntries; }
 }

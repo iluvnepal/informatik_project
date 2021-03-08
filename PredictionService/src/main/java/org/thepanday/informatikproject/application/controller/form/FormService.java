@@ -16,6 +16,7 @@ import java.util.Map;
 /**
  *
  */
+@Service
 public class FormService implements IFormService {
 
     @Autowired

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public interface IFormService {
 
     public Map<String, List<String>> getTeamsForAllLeague();

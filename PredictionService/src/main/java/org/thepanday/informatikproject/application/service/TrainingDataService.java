@@ -9,6 +9,7 @@ package org.thepanday.informatikproject.application.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.thepanday.informatikproject.common.util.UnderstatDataParser;
 import org.thepanday.informatikproject.common.util.entity.TeamDetail;
 import org.thepanday.informatikproject.common.util.entity.TeamsContainer;
@@ -20,10 +21,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  *
  */
+@Service
 public class TrainingDataService implements ITrainingDataService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainingDataService.class);
@@ -54,6 +57,11 @@ public class TrainingDataService implements ITrainingDataService {
     }
 
     @Override
+    public boolean isInitialised() {
+        return !mCompleteTeamDataMap.isEmpty();
+    }
+
+    @Override
     public List<TrainingData> getTrainingData() {
         if (mCompleteTeamDataMap.isEmpty()) {
             LOGGER.info("Data map empty. Attempting to scrape data.");
@@ -66,7 +74,7 @@ public class TrainingDataService implements ITrainingDataService {
         if (!mCompleteTrainingDataList.isEmpty()) {
             return mCompleteTrainingDataList;
         }
-        // extract training data from all available match histories from each team.
+        // extract training data from all available match histori\es from each team.
         for (Map.Entry<String, TeamDetail> teamDetailMap : mCompleteTeamDataMap.entrySet()) {
             final List<TrainingData> trainingDataFromSingleTeamHistory = this.getTrainingDataFromSingleTeamHistory(teamDetailMap
                                                                                                                        .getValue()
@@ -85,18 +93,37 @@ public class TrainingDataService implements ITrainingDataService {
     }
 
     @Override
-    public List<TrainingData> getTrainingDataForTeams(final String homeTeam, final String awayTeam) {
+    public List<TrainingData> getTrainingDataForTeams(final String homeTeamName, final String awayTeamName) {
         // todo get averate training stats from all previous matches of home and away teams.
         if (mCompleteTeamDataMap.isEmpty()) {
             this.gatherAllTeamsDataAsynchronously();
             return Collections.emptyList();
         }
-        final TeamDetail homeTeamDetail = mCompleteTeamDataMap.get(homeTeam);
-        final TeamDetail awayTeamDetail = mCompleteTeamDataMap.get(awayTeam);
+
+        final TeamDetail homeTeamDetail = mCompleteTeamDataMap.get(getTeamIdForTeamName(homeTeamName));
+        final TeamDetail awayTeamDetail = mCompleteTeamDataMap.get(getTeamIdForTeamName(awayTeamName));
         final List<TrainingData> homeTeamTrainingData = getTrainingDataFromSingleTeamHistory(homeTeamDetail.getHistory());
         final List<TrainingData> awayTeamTrainingData = getTrainingDataFromSingleTeamHistory(awayTeamDetail.getHistory());
 
         return List.of(getAverageFromTrainingData(homeTeamTrainingData), getAverageFromTrainingData(awayTeamTrainingData));
+    }
+
+    /**
+     * Returns team id (key in {@link #mCompleteTeamDataMap}) for a given team name.
+     *
+     * @param teamName
+     * @return teamId or {@code null} if no team id found for team name.
+     */
+    private String getTeamIdForTeamName(String teamName) {
+        for (Map.Entry<String, TeamDetail> teamIdTeamDetailEntry : mCompleteTeamDataMap.entrySet()) {
+            if (teamIdTeamDetailEntry
+                .getValue()
+                .getTeamName()
+                .equals(teamName)) {
+                return teamIdTeamDetailEntry.getKey();
+            }
+        }
+        return null;
     }
 
     private TrainingData refineStatToTrainingData(History history) {
@@ -114,17 +141,27 @@ public class TrainingDataService implements ITrainingDataService {
     private TrainingData getAverageFromTrainingData(List<TrainingData> dataList) {
         final TrainingData trainingData = new TrainingData();
         List<List<Double>> inputList = new ArrayList<>();
+        int colIndex = 0;
         dataList.forEach(t -> inputList.add(t.getInput()));
-        List<Double> averageInput = new ArrayList<>(inputList
-                                                        .get(0)
-                                                        .size());
-        for (int i = 0; i < inputList.size(); i++) {
-            final List<Double> input = inputList.get(i);
-            for (int j = 0; j < input.size(); i++) {
-                double avg = input.get(j) + averageInput.get(j);
-                averageInput.set(j, avg / 2);
+        int inputCount = inputList
+            .get(0)
+            .size();
+        List<Double> averageInput = new ArrayList<>(inputCount);
+        while (colIndex < inputCount) {
+            List<Double> singleInputToAvg = new ArrayList<>();
+            for (int i = 0; i < inputList.size(); i++) {
+                singleInputToAvg.add(inputList
+                                         .get(i)
+                                         .get(colIndex));
             }
+            final Double avg = singleInputToAvg
+                .stream()
+                .reduce((a, b) -> (a + b) / 2)
+                .orElse(0.0);
+            averageInput.add(avg);
+            colIndex++;
         }
+
         trainingData.setInput(averageInput);
         return trainingData;
     }

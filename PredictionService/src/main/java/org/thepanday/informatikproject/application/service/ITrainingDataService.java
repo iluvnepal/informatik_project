@@ -13,7 +13,6 @@ import org.thepanday.informatikproject.common.util.entity.TrainingData;
 
 import java.util.List;
 
-@Service
 public interface ITrainingDataService {
 
     /**
@@ -34,6 +33,8 @@ public interface ITrainingDataService {
 
     @Async
     public void gatherAllTrainingDataAsynchronously();
+
+    public boolean isInitialised();
 
     public List<TrainingData> getTrainingDataForTeams(final String homeTeam, final String awayTeam);
 

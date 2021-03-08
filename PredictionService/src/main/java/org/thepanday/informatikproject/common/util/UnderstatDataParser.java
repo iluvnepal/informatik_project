@@ -10,6 +10,7 @@ package org.thepanday.informatikproject.common.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.time.StopWatch;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thepanday.informatikproject.common.entity.TeamData;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -34,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 public class UnderstatDataParser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UnderstatDataParser.class);
-    private static final StopWatch TIMER = new StopWatch(UnderstatDataParser.class.getSimpleName());
 
     private static final String BASE_URL = "https://understat.com/league";
     private static final String[] LEAGUES = { "La_liga", "EPL", "Bundesliga", "Serie_A", "Ligue_1", "RFPL" };
@@ -70,9 +70,6 @@ public class UnderstatDataParser {
     }
 
     public TeamsContainer scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer() {
-        TIMER.start();
-        LOGGER.info("Scraping started at: {}", new Time(TIMER.getStartTime()));
-        int historyCount = 0;
         final TeamsContainer teamsContainer = new TeamsContainer(new HashMap<>());
         for (String league : LEAGUES) {
             for (String year : YEARS) {
@@ -81,13 +78,10 @@ public class UnderstatDataParser {
                 teamsContainer.addToEntries(containerToAdd);
             }
         }
-        TIMER.stop();
-        LOGGER.info("Scraping finished. Total Data Scraped : {}, time taken : {}",
+        LOGGER.info("Scraping finished. Total Data Scraped : {}",
                     teamsContainer
                         .getTeamEntries()
-                        .size(),
-                    new Time(TIMER.getTime(TimeUnit.SECONDS)));
-        TIMER.reset();
+                        .size());
         return teamsContainer;
     }
 

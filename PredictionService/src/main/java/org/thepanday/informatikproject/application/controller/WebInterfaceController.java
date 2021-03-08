@@ -25,6 +25,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.thepanday.informatikproject.application.controller.form.IFormService;
 import org.thepanday.informatikproject.application.controller.form.RequestFormModel;
 import org.thepanday.informatikproject.application.service.ITrainingDataService;
+import org.thepanday.informatikproject.application.service.TrainingDataService;
+import org.thepanday.informatikproject.common.util.entity.TrainingData;
+
+import java.util.List;
 
 @Controller
 @EnableWebMvc
@@ -38,10 +42,25 @@ public class WebInterfaceController {
     @Autowired
     private ITrainingDataService mTrainingDataService;
 
+    private static boolean firstLoad = true;
+
+    private void init() {
+        if (!WebInterfaceController.firstLoad) {
+            return;
+        }
+        if (!mTrainingDataService.isInitialised()) {
+            LOGGER.info("Initialising training data service.");
+            new Thread(() -> {
+                mTrainingDataService.gatherAllTeamsDataAsynchronously();
+            }).start();
+        }
+
+        WebInterfaceController.firstLoad = false;
+    }
+
     @GetMapping(value = "/")
     public ModelAndView showForm() {
-        LOGGER.info("Initialising training data service.");
-        mTrainingDataService.gatherAllTeamsDataAsynchronously();
+        init();
         final ModelAndView requestForm = new ModelAndView("html/requestform");
         requestForm.addObject("requestform", new RequestFormModel());
 
@@ -54,6 +73,7 @@ public class WebInterfaceController {
             RequestFormModel formData, BindingResult result, Model model) {
 
         LOGGER.info("League: {}, TeamA: {}, TeamB: {}", formData.getLeague(), formData.getHomeTeam(), formData.getAwayTeam());
+        final List<TrainingData> trainingDataForTeams = mTrainingDataService.getTrainingDataForTeams(formData.getHomeTeam(), formData.getAwayTeam());
 
         if (result.hasErrors()) {
             LOGGER.warn(result
@@ -63,7 +83,10 @@ public class WebInterfaceController {
         }
         ModelAndView mav = new ModelAndView("html/submittedDataView");
         mav.addObject("formData", formData);
-
+        if (trainingDataForTeams.size() == 2) {
+            mav.addObject("homeTeamStat", trainingDataForTeams.get(0));
+            mav.addObject("awayTeamStat", trainingDataForTeams.get(1));
+        }
         return mav;
     }
 
