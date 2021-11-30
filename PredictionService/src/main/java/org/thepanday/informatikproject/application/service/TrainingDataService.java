@@ -11,17 +11,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thepanday.informatikproject.common.util.UnderstatDataParser;
-import org.thepanday.informatikproject.common.util.entity.TeamDetail;
-import org.thepanday.informatikproject.common.util.entity.TeamsContainer;
-import org.thepanday.informatikproject.common.util.entity.History;
-import org.thepanday.informatikproject.common.util.entity.TrainingData;
+import org.thepanday.informatikproject.common.util.jsonentities.TeamDetail;
+import org.thepanday.informatikproject.common.util.jsonentities.ScrapedPageContainer;
+import org.thepanday.informatikproject.common.util.jsonentities.History;
+import org.thepanday.informatikproject.common.util.jsonentities.TrainingData;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  *
@@ -37,9 +36,11 @@ public class TrainingDataService implements ITrainingDataService {
     private Map<String, TeamDetail> mCompleteTeamDataMap = new HashMap<>();
     public List<TrainingData> mCompleteTrainingDataList = new ArrayList<>();
 
+
+
     // todo: do i need this?
     @Override
-    public TeamsContainer getTeamsDataContainer() {
+    public ScrapedPageContainer getTeamsDataContainer() {
         return dataParser.scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer();
     }
 
@@ -47,7 +48,7 @@ public class TrainingDataService implements ITrainingDataService {
     public void gatherAllTeamsDataAsynchronously() {
         mCompleteTeamDataMap = dataParser
             .scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer()
-            .getTeamEntries();
+            .getTeamEntriesMap();
         LOGGER.info("Training data sraping complete. TeamDataMap contains {} teams.", mCompleteTeamDataMap.size());
     }
 
@@ -64,10 +65,10 @@ public class TrainingDataService implements ITrainingDataService {
     @Override
     public List<TrainingData> getTrainingData() {
         if (mCompleteTeamDataMap.isEmpty()) {
-            LOGGER.info("Data map empty. Attempting to scrape data.");
+            LOGGER.info("Data map empty. Attempting to fetch data.");
             mCompleteTeamDataMap = dataParser
                 .scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer()
-                .getTeamEntries();
+                .getTeamEntriesMap();
             LOGGER.info("Training data sraping complete. TeamDataMap contains {} teams.", mCompleteTeamDataMap.size());
         }
 

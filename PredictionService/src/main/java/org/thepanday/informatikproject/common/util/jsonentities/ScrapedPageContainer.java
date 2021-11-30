@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package org.thepanday.informatikproject.common.util.entity;
+package org.thepanday.informatikproject.common.util.jsonentities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,42 +15,44 @@ import java.util.Set;
 /**
  * Contains team
  */
-public class TeamsContainer {
+public class ScrapedPageContainer {
 
-    public Map<String, TeamDetail> teamEntries;
+    /**
+     * Key is the team id.
+     */
+    private Map<String, TeamDetail> mTeamEntriesMap;
 
     @JsonCreator
-    public TeamsContainer(
+    public ScrapedPageContainer(
         @JsonProperty()
-        final Map<String, TeamDetail> teamEntries) {
-        this.teamEntries = teamEntries;
+        final Map<String, TeamDetail> mTeamEntriesMap) {
+        this.mTeamEntriesMap = mTeamEntriesMap;
     }
 
     /**
      * Add entries from new container provided as parameter (likely from new page url) to pre-existing teamEntry.
      * @param container
      */
-    public void addToEntries(TeamsContainer container) {
+    public void addToEntries(ScrapedPageContainer container) {
         final Set<Map.Entry<String, TeamDetail>> teamEntrySet = container
-            .getTeamEntries()
+            .getTeamEntriesMap()
             .entrySet();
         for (Map.Entry<String, TeamDetail> stringTeamDetailEntry : teamEntrySet) {
             final String teamId = stringTeamDetailEntry.getKey();
-            if (teamEntries.containsKey(teamId)) {
-                final TeamDetail teamDetail = teamEntries.get(teamId);
+            if (mTeamEntriesMap.containsKey(teamId)) {
+                final TeamDetail teamDetail = mTeamEntriesMap.get(teamId);
                 teamDetail
                     .getHistory()
                     .addAll(stringTeamDetailEntry
                                 .getValue()
                                 .getHistory());
             } else {
-                teamEntries.putIfAbsent(teamId, stringTeamDetailEntry.getValue());
+                mTeamEntriesMap.putIfAbsent(teamId, stringTeamDetailEntry.getValue());
             }
         }
-
     }
 
-    public Map<String, TeamDetail> getTeamEntries() {return this.teamEntries;}
+    public Map<String, TeamDetail> getTeamEntriesMap() {return this.mTeamEntriesMap;}
 
-    public void setTeamEntries(Map<String, TeamDetail> teamEntries) {this.teamEntries = teamEntries; }
+    public void setTeamEntriesMap(Map<String, TeamDetail> teamEntriesMap) {this.mTeamEntriesMap = teamEntriesMap; }
 }

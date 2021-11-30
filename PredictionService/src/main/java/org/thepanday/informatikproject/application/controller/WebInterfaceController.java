@@ -25,8 +25,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.thepanday.informatikproject.application.controller.form.IFormService;
 import org.thepanday.informatikproject.application.controller.form.RequestFormModel;
 import org.thepanday.informatikproject.application.service.ITrainingDataService;
-import org.thepanday.informatikproject.application.service.TrainingDataService;
-import org.thepanday.informatikproject.common.util.entity.TrainingData;
+import org.thepanday.informatikproject.common.util.jsonentities.TrainingData;
 
 import java.util.List;
 

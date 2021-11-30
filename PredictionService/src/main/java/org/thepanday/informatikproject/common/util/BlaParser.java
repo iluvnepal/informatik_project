@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.text.StringEscapeUtils;
-import org.thepanday.informatikproject.common.util.entity.TeamsContainer;
+import org.thepanday.informatikproject.common.util.jsonentities.ScrapedPageContainer;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -58,10 +58,10 @@ public class BlaParser {
         content = StringEscapeUtils.unescapeJava(content.replaceAll("\\\\x", "\\\\u00"));
     }
 
-    public TeamsContainer toEntry() throws IOException {
+    public ScrapedPageContainer toEntry() throws IOException {
         String fromFile = Files.readString(Paths.get("try_data1.json"), StandardCharsets.US_ASCII);
         var o = new ObjectMapper();
-        return o.readValue(fromFile, TeamsContainer.class);
+        return o.readValue(fromFile, ScrapedPageContainer.class);
     }
 
     public static void main(String[] args) {

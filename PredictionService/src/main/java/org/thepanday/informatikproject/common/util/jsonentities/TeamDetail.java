@@ -1,5 +1,5 @@
 
-package org.thepanday.informatikproject.common.util.entity;
+package org.thepanday.informatikproject.common.util.jsonentities;
 
 import java.util.HashMap;
 import java.util.List;

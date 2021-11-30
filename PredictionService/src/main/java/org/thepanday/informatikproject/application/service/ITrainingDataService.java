@@ -7,20 +7,19 @@
 package org.thepanday.informatikproject.application.service;
 
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.thepanday.informatikproject.common.util.entity.TeamsContainer;
-import org.thepanday.informatikproject.common.util.entity.TrainingData;
+import org.thepanday.informatikproject.common.util.jsonentities.ScrapedPageContainer;
+import org.thepanday.informatikproject.common.util.jsonentities.TrainingData;
 
 import java.util.List;
 
 public interface ITrainingDataService {
 
     /**
-     * Fetch teams data from www.understat.com and map data to {@link TeamsContainer}
+     * Fetch teams data from www.understat.com and map data to {@link ScrapedPageContainer}
      *
      * @return
      */
-    public TeamsContainer getTeamsDataContainer();
+    public ScrapedPageContainer getTeamsDataContainer();
 
     public List<TrainingData> getTrainingData();
 

@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package org.thepanday.informatikproject.common.util.entity;
+package org.thepanday.informatikproject.common.util.jsonentities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
