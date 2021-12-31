@@ -8,7 +8,7 @@ package org.thepanday.informatikproject.application.controller.form;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.thepanday.informatikproject.common.util.UnderstatDataParser;
+import org.thepanday.informatikproject.util.UnderstatDataParser;
 
 import java.util.List;
 import java.util.Map;
@@ -25,11 +25,11 @@ public class FormService implements IFormService {
     @Override
     public Map<String, List<String>> getTeamsForAllLeague() {
         if (dataParser
-            .getLeagueTeamsMap()
+            .getLeagueToTeams()
             .isEmpty()) {
             dataParser.populateLeagueTeamsMap();
         }
-        return dataParser.getLeagueTeamsMap();
+        return dataParser.getLeagueToTeams();
     }
 
     @Override

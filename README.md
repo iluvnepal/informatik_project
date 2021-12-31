@@ -22,3 +22,9 @@ The problem here arises as a match statistics can be given as an input only when
 
 ## Depth of statistics
 players involved, matches previously played, current form, etc.
+
+## Not in Scope
+Data including from only past seasons for single team. e.g. user wants to use average from single season.
+possibilities:
+- [ ] has the team gotten better or worse comparing average from each individual season.
+- [ ] use of caches could increase performance in case of bigger data volume.

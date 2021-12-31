@@ -24,8 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.thepanday.informatikproject.application.controller.form.IFormService;
 import org.thepanday.informatikproject.application.controller.form.RequestFormModel;
-import org.thepanday.informatikproject.application.service.ITrainingDataService;
-import org.thepanday.informatikproject.common.util.jsonentities.TrainingData;
+import org.thepanday.informatikproject.application.model.brain.service.ITrainingDataService;
+import org.thepanday.informatikproject.common.entity.jsonentities.TrainingData;
 
 import java.util.List;
 
@@ -37,7 +37,8 @@ public class WebInterfaceController {
 
     @Autowired
     private IFormService mFormService;
-
+    @Autowired
+    private ViewContentsGenerator mViewContentsGenerator;
     @Autowired
     private ITrainingDataService mTrainingDataService;
 
@@ -47,12 +48,8 @@ public class WebInterfaceController {
         if (!WebInterfaceController.firstLoad) {
             return;
         }
-        if (!mTrainingDataService.isInitialised()) {
-            LOGGER.info("Initialising training data service.");
-            new Thread(() -> {
-                mTrainingDataService.gatherAllTeamsDataAsynchronously();
-            }).start();
-        }
+        // todo: get the teams map and stuff
+        mViewContentsGenerator.getTeamsList();
 
         WebInterfaceController.firstLoad = false;
     }
@@ -72,7 +69,7 @@ public class WebInterfaceController {
             RequestFormModel formData, BindingResult result, Model model) {
 
         LOGGER.info("League: {}, TeamA: {}, TeamB: {}", formData.getLeague(), formData.getHomeTeam(), formData.getAwayTeam());
-        final List<TrainingData> trainingDataForTeams = mTrainingDataService.getTrainingDataForTeams(formData.getHomeTeam(), formData.getAwayTeam());
+        final List<TrainingData> trainingDataForTeams = mTrainingDataService.getTestDataForTeams(formData.getHomeTeam(), formData.getAwayTeam());
 
         if (result.hasErrors()) {
             LOGGER.warn(result
@@ -94,7 +91,7 @@ public class WebInterfaceController {
     public String getTeamsForLeague() {
         ObjectMapper o = new ObjectMapper();
         try {
-            return o.writeValueAsString(mFormService.getTeamsForAllLeague());
+            return o.writeValueAsString(mViewContentsGenerator.getTeamsList());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Got jackShit";
@@ -134,7 +131,7 @@ public class WebInterfaceController {
             String homeTeamName,
         @RequestParam(name = "awayTeam")
             String awayTeamName) {
-        return objectToJsonString(mTrainingDataService.getTrainingDataForTeams(homeTeamName, awayTeamName));
+        return objectToJsonString(mTrainingDataService.getTestDataForTeams(homeTeamName, awayTeamName));
     }
 
     private String objectToJsonString(Object value) {
