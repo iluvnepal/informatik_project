@@ -1,5 +1,4 @@
 .gitignore
-resources/
 .idea/
 PredictionService/target/
 research/
