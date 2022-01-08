@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Football Match iPredictor</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link href="requestForm.css" rel="stylesheet">
+</head>
+<body>
+<script th:src="@{/js/reactiveForm.js}" type="text/javascript"></script>
+<h1>Form</h1>
+
+<form method="post" th:action="@{/submitTeams}" th:object="${requestform}">
+    <p>League :<select id="league" th:field="*{league}" type="text"></select></p>
+    <p>Home Team :<select id="home_team" th:field="*{homeTeam}" type="text"></select></p>
+    <p>Away Team :<select id="away_team" th:field="*{awayTeam}" type="text"></select></p>
+    <p><input type="submit" value="Submit"/> <input id="reset" type="reset" value="Reset"/></p>
+</form>
+</body>
+</html>

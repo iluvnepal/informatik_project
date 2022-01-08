@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Football Match iPredictor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<h2>Submitted Information</h2>
+<p th:text="${'League       : ' + formData.league}"></p>
+<p th:text="${'Home team    : ' + formData.homeTeam}"></p>
+<p th:text="${'Away team    : ' + formData.awayTeam}"></p>
+<br/>
+<button id="train">Train my network</button>
+
+<!--<script src="//unpkg.com/brain.js"></script>-->
+<script type="application/javascript" , src="/js/lib/brain.js"></script>
+<script type="application/javascript" , src="/js/app.js"></script>
+</body>
+
+</html>
