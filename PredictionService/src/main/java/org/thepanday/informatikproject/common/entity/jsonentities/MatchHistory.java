@@ -1,14 +1,16 @@
 package org.thepanday.informatikproject.common.entity.jsonentities;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.thepanday.informatikproject.common.entity.MatchStatEnum;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "h_a", "xG", "xGA", "npxG", "npxGA", "ppda", "ppda_allowed", "deep", "deep_allowed", "scored", "missed", "xpts", "result", "date", "wins",
@@ -55,6 +57,11 @@ public class MatchHistory {
     private Double npxGD;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
+    private final Map<MatchStatEnum, Object> mStatEnumToValue = new EnumMap<>(MatchStatEnum.class);
+
+    public Object get(MatchStatEnum statEnum) {
+        return mStatEnumToValue.get(statEnum);
+    }
 
     @JsonProperty("h_a")
     public String getHA() {
@@ -64,6 +71,7 @@ public class MatchHistory {
     @JsonProperty("h_a")
     public void setHA(String hA) {
         this.hA = hA;
+        mStatEnumToValue.put(MatchStatEnum.HOME_AWAY, hA);
     }
 
     @JsonProperty("xG")
@@ -74,6 +82,7 @@ public class MatchHistory {
     @JsonProperty("xG")
     public void setXG(Double xG) {
         this.xG = xG;
+        mStatEnumToValue.put(MatchStatEnum.EXPECTED_GOALS, xG);
     }
 
     @JsonProperty("xGA")
@@ -84,6 +93,7 @@ public class MatchHistory {
     @JsonProperty("xGA")
     public void setXGA(Double xGA) {
         this.xGA = xGA;
+        mStatEnumToValue.put(MatchStatEnum.EXPECTED_GOALS_AGAINST, xGA);
     }
 
     @JsonProperty("npxG")
@@ -94,6 +104,7 @@ public class MatchHistory {
     @JsonProperty("npxG")
     public void setNpxG(Double npxG) {
         this.npxG = npxG;
+        mStatEnumToValue.put(MatchStatEnum.NON_PENALTY_EXPECTED_GOALS, npxG);
     }
 
     @JsonProperty("npxGA")
@@ -104,6 +115,7 @@ public class MatchHistory {
     @JsonProperty("npxGA")
     public void setNpxGA(Double npxGA) {
         this.npxGA = npxGA;
+        mStatEnumToValue.put(MatchStatEnum.NON_PENALTY_EXPECTED_GOALS_AGAINST, npxGA);
     }
 
     @JsonProperty("ppda")
@@ -114,6 +126,8 @@ public class MatchHistory {
     @JsonProperty("ppda")
     public void setPpda(Ppda ppda) {
         this.ppda = ppda;
+        mStatEnumToValue.put(MatchStatEnum.PPDA_ATT, ppda.getAtt());
+        mStatEnumToValue.put(MatchStatEnum.PPDA_DEF, ppda.getDef());
     }
 
     @JsonProperty("ppda_allowed")
@@ -124,6 +138,8 @@ public class MatchHistory {
     @JsonProperty("ppda_allowed")
     public void setPpdaAllowed(Ppda ppdaAllowed) {
         this.ppdaAllowed = ppdaAllowed;
+        mStatEnumToValue.put(MatchStatEnum.PPDA_ALLOWED_ATT, ppdaAllowed.getAtt());
+        mStatEnumToValue.put(MatchStatEnum.PPDA_ALLOWED_DEF, ppdaAllowed.getDef());
     }
 
     @JsonProperty("deep")
@@ -134,6 +150,7 @@ public class MatchHistory {
     @JsonProperty("deep")
     public void setDeep(Integer deep) {
         this.deep = deep;
+        mStatEnumToValue.put(MatchStatEnum.DEEP, deep);
     }
 
     @JsonProperty("deep_allowed")
@@ -144,6 +161,7 @@ public class MatchHistory {
     @JsonProperty("deep_allowed")
     public void setDeepAllowed(Integer deepAllowed) {
         this.deepAllowed = deepAllowed;
+        mStatEnumToValue.put(MatchStatEnum.DEEP_ALLOWED, deepAllowed);
     }
 
     @JsonProperty("scored")
@@ -154,6 +172,7 @@ public class MatchHistory {
     @JsonProperty("scored")
     public void setScored(Integer scored) {
         this.scored = scored;
+        mStatEnumToValue.put(MatchStatEnum.GOALS_SCORED, scored);
     }
 
     @JsonProperty("missed")
@@ -164,6 +183,7 @@ public class MatchHistory {
     @JsonProperty("missed")
     public void setMissed(Integer missed) {
         this.missed = missed;
+        mStatEnumToValue.put(MatchStatEnum.GOALS_CONCEIVED, missed);
     }
 
     @JsonProperty("xpts")
@@ -174,6 +194,7 @@ public class MatchHistory {
     @JsonProperty("xpts")
     public void setXpts(Double xpts) {
         this.xpts = xpts;
+        mStatEnumToValue.put(MatchStatEnum.EXPECTED_POINTS, xpts);
     }
 
     @JsonProperty("result")
@@ -184,6 +205,7 @@ public class MatchHistory {
     @JsonProperty("result")
     public void setResult(String result) {
         this.result = result;
+        mStatEnumToValue.put(MatchStatEnum.RESULT, result);
     }
 
     @JsonProperty("date")
@@ -194,6 +216,7 @@ public class MatchHistory {
     @JsonProperty("date")
     public void setDate(String date) {
         this.date = date;
+        mStatEnumToValue.put(MatchStatEnum.DATE, date);
     }
 
     @JsonProperty("wins")

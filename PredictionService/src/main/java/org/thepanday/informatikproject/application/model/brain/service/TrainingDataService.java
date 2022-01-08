@@ -10,16 +10,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thepanday.informatikproject.common.data.TrainingDataSet;
+import org.thepanday.informatikproject.common.entity.MatchStatEnum;
+import org.thepanday.informatikproject.common.entity.jsonentities.MatchHistory;
 import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetail;
 import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetailEntries;
 import org.thepanday.informatikproject.common.entity.jsonentities.TrainingData;
 import org.thepanday.informatikproject.util.JsonDataUtility;
-import org.thepanday.informatikproject.util.UnderstatDataParser;
+import org.thepanday.informatikproject.util.MatchHistoryUtility;
+import org.thepanday.informatikproject.util.WebpageScrapingService;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.DEEP;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.DEEP_ALLOWED;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.EXPECTED_GOALS;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.EXPECTED_GOALS_AGAINST;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.GOALS_CONCEIVED;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.GOALS_SCORED;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.HOME_AWAY;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.NON_PENALTY_EXPECTED_GOALS;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.NON_PENALTY_EXPECTED_GOALS_AGAINST;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.PPDA;
+import static org.thepanday.informatikproject.common.entity.MatchStatEnum.PPDA_ALLOWED;
 
 /**
  *
@@ -29,11 +50,26 @@ public class TrainingDataService implements ITrainingDataService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainingDataService.class);
 
+    private static final int INPUT_COUNT = 9;
+    private static final int OUTPUT_COUNT = 2;
+    public static final List<MatchStatEnum> INCLUDED_PARAMETERS = new LinkedList<>(Arrays.asList(HOME_AWAY,
+                                                                                                 EXPECTED_GOALS,
+                                                                                                 NON_PENALTY_EXPECTED_GOALS,
+                                                                                                 PPDA,
+                                                                                                 DEEP,
+                                                                                                 EXPECTED_GOALS_AGAINST,
+                                                                                                 NON_PENALTY_EXPECTED_GOALS_AGAINST,
+                                                                                                 PPDA_ALLOWED,
+                                                                                                 DEEP_ALLOWED,
+                                                                                                 GOALS_SCORED,
+                                                                                                 GOALS_CONCEIVED));
+
     @Autowired
-    private UnderstatDataParser mUnderstatDataParser;
+    private WebpageScrapingService mWebpageScrapingService;
 
     private TeamDetailEntries mCurrentTeamDetailEntries;
     private final TeamDetailEntries mDefaultTeamDetailEntries;
+    private final List<MatchHistory> mMatchHistories = new ArrayList<>();
 
     private Map<String, String> mTitleToId = new HashMap<>();
 
@@ -49,14 +85,13 @@ public class TrainingDataService implements ITrainingDataService {
             .getClass()
             .getClassLoader();
         final InputStream resourceAsStream = classLoader.getResourceAsStream(JsonDataUtility.ALL_DATA);
-        // todo! make this work. something with resource is not right.
         final String jsonStringFromFile = JsonDataUtility.getStringFromFileInputStream(resourceAsStream);
         return JsonDataUtility.teamDetailEntriesJsonToObject(jsonStringFromFile);
     }
 
     @Override
     public void gatherAllTeamsDataOnline() {
-        mCurrentTeamDetailEntries = mUnderstatDataParser.scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer();
+        mCurrentTeamDetailEntries = mWebpageScrapingService.scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer();
         LOGGER.info("Processing web-data complete. All match histories of {} teams were collected.",
                     mCurrentTeamDetailEntries
                         .getTeamEntriesMap()
@@ -65,30 +100,39 @@ public class TrainingDataService implements ITrainingDataService {
 
     @Override
     public List<TrainingData> getTrainingData() {
-        // todo: figure out first what the training data looks like relative to MatchHistory
-        //  Implement Neuroph to a neural network and see what kind of data it takes as input and build training data model accordingly
-        return null;
+        return mMatchHistories
+            .stream()
+            .map(MatchHistoryUtility::convertMatchHistoryToTrainingData)
+            .collect(Collectors.toList());
     }
 
     @Override
-    public List<TrainingData> getTestDataForTeams(final String homeTeamName, final String awayTeamName) {
-        //todo: figure out first what the training data looks like relative to MatchHistory
-        mCurrentTeamDetailEntries
-            .getTeamDetailForTeam(mTitleToId.get(homeTeamName))
-            .getAverageMatchHistory();
-        mCurrentTeamDetailEntries
-            .getTeamDetailForTeam(mTitleToId.get(awayTeamName))
-            .getAverageMatchHistory();
-        return null;
+    public TrainingDataSet getTrainingDataSet() {
+        return new TrainingDataSet(getTrainingData(), INPUT_COUNT, OUTPUT_COUNT);
+    }
+
+    @Override
+    public List<TrainingData> getInputForTeams(final String homeTeamName, final String awayTeamName) {
+        final MatchHistory matchHistory = MatchHistoryUtility.mergeMatchHistoriesToInputData(mCurrentTeamDetailEntries
+                                                                                                 .getTeamDetailForTeam(mTitleToId.get(homeTeamName))
+                                                                                                 .getAverageMatchHistory(),
+                                                                                             mCurrentTeamDetailEntries
+                                                                                                 .getTeamDetailForTeam(mTitleToId.get(awayTeamName))
+                                                                                                 .getAverageMatchHistory());
+        return Collections.singletonList(MatchHistoryUtility.convertMatchHistoryToTrainingData(matchHistory));
+
     }
 
     private void init() {
-        // initialise title-to-id map
         for (Map.Entry<String, TeamDetail> teamDetailEntry : mCurrentTeamDetailEntries
             .getTeamEntriesMap()
             .entrySet()) {
             final TeamDetail teamDetail = teamDetailEntry.getValue();
+            // initialise title-to-id map
             mTitleToId.put(teamDetail.getId(), teamDetail.getTeamName());
+            // collect all match histories
+            mMatchHistories.addAll(teamDetail.getHistory());
         }
+
     }
 }

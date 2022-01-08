@@ -69,7 +69,7 @@ public class WebInterfaceController {
             RequestFormModel formData, BindingResult result, Model model) {
 
         LOGGER.info("League: {}, TeamA: {}, TeamB: {}", formData.getLeague(), formData.getHomeTeam(), formData.getAwayTeam());
-        final List<TrainingData> trainingDataForTeams = mTrainingDataService.getTestDataForTeams(formData.getHomeTeam(), formData.getAwayTeam());
+        final List<TrainingData> trainingDataForTeams = mTrainingDataService.getInputForTeams(formData.getHomeTeam(), formData.getAwayTeam());
 
         if (result.hasErrors()) {
             LOGGER.warn(result
@@ -131,7 +131,7 @@ public class WebInterfaceController {
             String homeTeamName,
         @RequestParam(name = "awayTeam")
             String awayTeamName) {
-        return objectToJsonString(mTrainingDataService.getTestDataForTeams(homeTeamName, awayTeamName));
+        return objectToJsonString(mTrainingDataService.getInputForTeams(homeTeamName, awayTeamName));
     }
 
     private String objectToJsonString(Object value) {

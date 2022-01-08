@@ -1,14 +1,14 @@
 package org.thepanday.informatikproject.common.entity.jsonentities;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "att", "def" })
@@ -20,6 +20,10 @@ public class Ppda {
     private Integer def;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
+
+    public double getPpda() {
+        return def == 0 ? 0 : ((double) att / def);
+    }
 
     @JsonProperty("att")
     public Integer getAtt() {

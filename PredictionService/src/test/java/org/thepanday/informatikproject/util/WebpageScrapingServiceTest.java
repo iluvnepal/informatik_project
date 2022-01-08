@@ -16,10 +16,10 @@ import java.io.IOException;
 ////////////////////////////////////////////////////////////////////////////////
 @SpringBootTest
 @ContextConfiguration(classes = { TestConfig.class })
-class UnderstatDataParserTest {
+class WebpageScrapingServiceTest {
 
     @Autowired
-    private UnderstatDataParser mParser;
+    private WebpageScrapingService mParser;
 
     @Test
     void scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer() throws IOException {

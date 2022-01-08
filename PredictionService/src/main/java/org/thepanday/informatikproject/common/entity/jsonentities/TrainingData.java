@@ -6,59 +6,63 @@
 
 package org.thepanday.informatikproject.common.entity.jsonentities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
  */
-// todo: Look at what Neuroph wants as trainging data for structure ideas.
 public class TrainingData {
-    @JsonProperty("input")
-    public List<Double> input = new ArrayList<>();
-    @JsonProperty("output")
-    public List<Integer> output = new ArrayList<>();
 
-    @JsonProperty("input")
+    private List<Double> mInput = new ArrayList<>();
+    private final AtomicInteger mInputCounts = new AtomicInteger(0);
+
     public List<Double> getInput() {
-        return input;
+        return mInput;
     }
 
-    @JsonProperty("input")
     public void setInput(List<Double> input) {
-        this.input = input;
+        this.mInput = input;
+        mInputCounts.incrementAndGet();
     }
 
-    @JsonProperty("output")
-    public List<Integer> getOutput() {
-        return output;
+    public AtomicInteger getInputCounts() {
+        return mInputCounts;
     }
 
-    @JsonProperty("output")
-    public void setOutput(List<Integer> output) {
-        this.output = output;
+    /**
+     * Performs rudimentary check for training data consistency by comparing counts of input and output.
+     *
+     * @param dataA
+     * @param dataB
+     * @return {@code true} if consistent, else {@code false}
+     */
+    public static boolean isDataConsistent(TrainingData dataA, TrainingData dataB) {
+        return (dataA
+                    .getInputCounts()
+                    .get() == dataB
+                    .getInputCounts()
+                    .get());
     }
 
     public TrainingData addInput(double stat) {
-        input.add(stat);
+        mInput.add(stat);
         return this;
     }
 
     /**
      * Add inputs in order. HA, XG, Deep, xGA, Deepallowed
+     *
      * @param stat
      * @return
      */
-    public TrainingData addInput(double... stat) {
-        Arrays.stream(stat).forEach(this::addInput);
-        return this;
-    }
 
-    public void addOutput(int scored, int concieved) {
-        output.add(scored);
-        output.add(concieved);
+    public TrainingData addInput(double... stat) {
+        Arrays
+            .stream(stat)
+            .forEach(this::addInput);
+        return this;
     }
 }

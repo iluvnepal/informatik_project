@@ -6,6 +6,7 @@
 
 package org.thepanday.informatikproject.application.model.brain.service;
 
+import org.thepanday.informatikproject.common.data.TrainingDataSet;
 import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetailEntries;
 import org.thepanday.informatikproject.common.entity.jsonentities.TrainingData;
 
@@ -18,16 +19,25 @@ public interface ITrainingDataService {
      *
      * @return
      */
-    public TeamDetailEntries getDefaultTeamDetailEntries();
+    TeamDetailEntries getDefaultTeamDetailEntries();
 
-    public List<TrainingData> getTrainingData();
+    List<TrainingData> getTrainingData();
+
+    TrainingDataSet getTrainingDataSet();
 
     /**
      * Data extraction from understat.com
      * Note: will run in background.
      */
-    public void gatherAllTeamsDataOnline();
+    void gatherAllTeamsDataOnline();
 
-    public List<TrainingData> getTestDataForTeams(final String homeTeam, final String awayTeam);
+    /**
+     * Get data for selected team that will be fed to network for prediction.
+     *
+     * @param homeTeam
+     * @param awayTeam
+     * @return
+     */
+    List<TrainingData> getInputForTeams(final String homeTeam, final String awayTeam);
 
 }

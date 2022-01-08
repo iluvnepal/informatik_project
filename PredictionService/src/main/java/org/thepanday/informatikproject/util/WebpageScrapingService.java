@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class UnderstatDataParser {
+public class WebpageScrapingService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnderstatDataParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebpageScrapingService.class);
 
     private static final String BASE_URL = "https://understat.com/league";
     private static final String[] LEAGUES = { "La_liga", "EPL", "Bundesliga", "Serie_A", "Ligue_1", "RFPL" };
@@ -37,7 +37,7 @@ public class UnderstatDataParser {
     private StringBuilder mJsonData = new StringBuilder();
     private Map<String, List<String>> mLeagueToTeams = new HashMap<>();
 
-    public UnderstatDataParser() {
+    public WebpageScrapingService() {
         this.populateLeagueTeamsMap();
     }
 
@@ -98,23 +98,21 @@ public class UnderstatDataParser {
     }
 
     protected HtmlPage getPage(String pageUrl) {
-        WebClient client = new WebClient();
-        client
-            .getOptions()
-            .setJavaScriptEnabled(false);
-        client
-            .getOptions()
-            .setCssEnabled(false);
-        client
-            .getOptions()
-            .setUseInsecureSSL(true);
-
-        try {
+        try (WebClient client = new WebClient()) {
+            client
+                .getOptions()
+                .setJavaScriptEnabled(false);
+            client
+                .getOptions()
+                .setCssEnabled(false);
+            client
+                .getOptions()
+                .setUseInsecureSSL(true);
             return client.getPage(pageUrl);
         } catch (IOException e) {
             LOGGER.error("Could not get page from URL: {}", pageUrl);
+            return null;
         }
-        return null;
     }
 
     private String decodeHex(final String encodedString) {

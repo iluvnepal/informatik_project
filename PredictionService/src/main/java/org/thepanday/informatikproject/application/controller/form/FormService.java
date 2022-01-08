@@ -8,7 +8,7 @@ package org.thepanday.informatikproject.application.controller.form;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.thepanday.informatikproject.util.UnderstatDataParser;
+import org.thepanday.informatikproject.util.WebpageScrapingService;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class FormService implements IFormService {
 
     @Autowired
-    private UnderstatDataParser dataParser;
+    private WebpageScrapingService dataParser;
 
     @Override
     public Map<String, List<String>> getTeamsForAllLeague() {

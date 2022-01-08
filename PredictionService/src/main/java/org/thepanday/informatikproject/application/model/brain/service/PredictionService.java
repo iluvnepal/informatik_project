@@ -6,50 +6,55 @@
 
 package org.thepanday.informatikproject.application.model.brain.service;
 
+import org.neuroph.core.data.DataSet;
+import org.neuroph.nnet.MultiLayerPerceptron;
+import org.neuroph.nnet.learning.MomentumBackpropagation;
+import org.neuroph.util.TransferFunctionType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetail;
-import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetailEntries;
-import org.thepanday.informatikproject.util.UnderstatDataParser;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  *
  */
 public class PredictionService implements IPredictionService {
 
-    // ------------------------------------------------------------------------
-    // constants
-    // ------------------------------------------------------------------------
-
-    // ------------------------------------------------------------------------
-    // members
-    // ------------------------------------------------------------------------
-
-    // ------------------------------------------------------------------------
-    // methods
-    // ------------------------------------------------------------------------
     @Autowired
-    private UnderstatDataParser mUnderstatDataParser;
+    private ITrainingDataService mTrainingDataService;
+
+    @Override
+    public MultiLayerPerceptron prepareNeuralNetwork(DataSet trainingDataSet) {
+        // todo:
+        // create multi layer perceptron
+        System.out.println("Creating neural network");
+        MultiLayerPerceptron neuralNet = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, 85, 18, 9);
+
+        // set learning parametars
+        MomentumBackpropagation learningRule = (MomentumBackpropagation) neuralNet.getLearningRule();
+        learningRule.setLearningRate(0.1);
+        learningRule.setMomentum(0.2);
+
+        // learn the training set
+        System.out.println("Training neural network...");
+        neuralNet.learn(trainingDataSet);
+        System.out.println("Done!");
+
+        // test perceptron
+        return neuralNet;
+    }
 
     @Override
     public String getTrainingData() {
-        final TeamDetailEntries allTeamDetailEntries = mUnderstatDataParser.scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer();
-        final Map<String, TeamDetail> teamEntries = allTeamDetailEntries.getTeamEntriesMap();
-        final String[] leagueNames = mUnderstatDataParser.getLeagues();
-        final Map<String, List<String>> leagueToleagueTeamsMap = mUnderstatDataParser.getLeagueToTeams();
+        // todo : who knows!
         return null;
     }
 
     @Override
     public void updateTrainingData() {
-
+        // not yet implemented
     }
 
     @Override
     public void getAverageMatchHistoryForTeam(String teamTitle) {
-        // todo
+        // todo : maybe remove as other services exist for this purpose
     }
 
     // ------------------------------------------------------------------------

@@ -9,7 +9,7 @@ package org.thepanday.informatikproject.application.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thepanday.informatikproject.application.model.brain.service.ITrainingDataService;
-import org.thepanday.informatikproject.util.UnderstatDataParser;
+import org.thepanday.informatikproject.util.WebpageScrapingService;
 
 import java.util.List;
 import java.util.Map;
@@ -23,9 +23,9 @@ public class ViewContentsGenerator {
     @Autowired
     private ITrainingDataService mTrainingDataService;
     @Autowired
-    private UnderstatDataParser mUnderstatDataParser;
+    private WebpageScrapingService mWebpageScrapingService;
 
     public Map<String, List<String>> getTeamsList() {
-        return mUnderstatDataParser.getLeagueToTeams();
+        return mWebpageScrapingService.getLeagueToTeams();
     }
 }
