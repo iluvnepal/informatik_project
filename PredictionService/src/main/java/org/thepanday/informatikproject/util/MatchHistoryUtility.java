@@ -11,6 +11,7 @@ import org.thepanday.informatikproject.common.entity.MatchStatEnum;
 import org.thepanday.informatikproject.common.entity.jsonentities.MatchHistory;
 import org.thepanday.informatikproject.common.entity.jsonentities.TrainingData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,10 +42,12 @@ public class MatchHistoryUtility {
     }
 
     public static TrainingData convertMatchHistoryToTrainingData(MatchHistory history) {
-        final TrainingData trainingData = new TrainingData();
+        final TrainingData trainingData = new TrainingData(TrainingDataService.INPUT_SIZE, TrainingDataService.OUTPUT_SIZE);
+        final ArrayList<Double> dataRow = new ArrayList<>();
         for (MatchStatEnum includedParameter : TrainingDataService.INCLUDED_PARAMETERS) {
-            trainingData.addInput(resolveStringsToDouble(includedParameter, history.get(includedParameter)));
+            dataRow.add(resolveStringsToDouble(includedParameter, history.get(includedParameter)));
         }
+        trainingData.setDataRow(dataRow);
         return trainingData;
     }
 

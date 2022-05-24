@@ -6,6 +6,7 @@
 
 package org.thepanday.informatikproject.application.model.brain.service;
 
+import org.neuroph.util.data.norm.MaxMinNormalizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,16 +43,11 @@ import static org.thepanday.informatikproject.common.entity.MatchStatEnum.NON_PE
 import static org.thepanday.informatikproject.common.entity.MatchStatEnum.PPDA;
 import static org.thepanday.informatikproject.common.entity.MatchStatEnum.PPDA_ALLOWED;
 
-/**
- *
- */
 @Service
 public class TrainingDataService implements ITrainingDataService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainingDataService.class);
 
-    private static final int INPUT_COUNT = 9;
-    private static final int OUTPUT_COUNT = 2;
     public static final List<MatchStatEnum> INCLUDED_PARAMETERS = new LinkedList<>(Arrays.asList(HOME_AWAY,
                                                                                                  EXPECTED_GOALS,
                                                                                                  NON_PENALTY_EXPECTED_GOALS,
@@ -63,6 +59,11 @@ public class TrainingDataService implements ITrainingDataService {
                                                                                                  DEEP_ALLOWED,
                                                                                                  GOALS_SCORED,
                                                                                                  GOALS_CONCEIVED));
+    /**
+     * Output size is always 2 in our implementation as the result is always goals scored and goals conceived.
+     */
+    public static final int OUTPUT_SIZE = 2;
+    public static final int INPUT_SIZE = INCLUDED_PARAMETERS.size() - OUTPUT_SIZE;
 
     @Autowired
     private WebpageScrapingService mWebpageScrapingService;
@@ -77,6 +78,14 @@ public class TrainingDataService implements ITrainingDataService {
         mDefaultTeamDetailEntries = getDefaultTeamDetailEntries();
         mCurrentTeamDetailEntries = mDefaultTeamDetailEntries;
         this.init();
+    }
+
+    @Override
+    public TrainingDataSet normalizeDataSet(TrainingDataSet dataSet) {
+        MaxMinNormalizer normalizer = new MaxMinNormalizer(dataSet);
+        normalizer.normalize(dataSet);
+
+        return dataSet;
     }
 
     @Override
@@ -108,7 +117,13 @@ public class TrainingDataService implements ITrainingDataService {
 
     @Override
     public TrainingDataSet getTrainingDataSet() {
-        return new TrainingDataSet(getTrainingData(), INPUT_COUNT, OUTPUT_COUNT);
+        return new TrainingDataSet(this.getTrainingData(), INPUT_SIZE, OUTPUT_SIZE);
+    }
+
+    @Override
+    public TrainingDataSet getNormalizedDataSet() {
+        TrainingDataSet dataSet = new TrainingDataSet(this.getTrainingData(), INPUT_SIZE, OUTPUT_SIZE);
+        return this.normalizeDataSet(dataSet);
     }
 
     @Override
@@ -120,7 +135,6 @@ public class TrainingDataService implements ITrainingDataService {
                                                                                                  .getTeamDetailForTeam(mTitleToId.get(awayTeamName))
                                                                                                  .getAverageMatchHistory());
         return Collections.singletonList(MatchHistoryUtility.convertMatchHistoryToTrainingData(matchHistory));
-
     }
 
     private void init() {

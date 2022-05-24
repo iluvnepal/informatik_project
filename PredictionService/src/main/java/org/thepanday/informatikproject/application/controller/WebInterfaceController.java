@@ -94,7 +94,7 @@ public class WebInterfaceController {
             return o.writeValueAsString(mViewContentsGenerator.getTeamsList());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return "Got jackShit";
+            return "Got Nothing";
         }
     }
 
@@ -106,7 +106,7 @@ public class WebInterfaceController {
             return o.writeValueAsString(mFormService.getLeagues());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return "Got jackShit";
+            return "Got noting";
         }
     }
 

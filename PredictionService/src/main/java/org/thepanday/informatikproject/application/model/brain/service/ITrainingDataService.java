@@ -14,6 +14,8 @@ import java.util.List;
 
 public interface ITrainingDataService {
 
+    public TrainingDataSet normalizeDataSet(TrainingDataSet dataSet);
+
     /**
      * Fetch teams data from www.understat.com and map data to {@link TeamDetailEntries}
      *
@@ -30,6 +32,8 @@ public interface ITrainingDataService {
      * Note: will run in background.
      */
     void gatherAllTeamsDataOnline();
+
+    TrainingDataSet getNormalizedDataSet();
 
     /**
      * Get data for selected team that will be fed to network for prediction.

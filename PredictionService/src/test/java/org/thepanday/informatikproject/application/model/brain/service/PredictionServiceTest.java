@@ -32,13 +32,12 @@ class PredictionServiceTest {
     @Test
     void testGetTrainingData() {
         assertNotNull(mPredictionService);
-        final TrainingDataSet trainingDataSet = mTrainingDataService.getTrainingDataSet();
-        //todo data set rows are empty. addInput needs to be called and dataset rows need to be created.
-        final List<DataSet> split = Arrays.asList(trainingDataSet.split(0.1, 0.01, 0.89));
-        System.out.println(MessageFormat.format("total data count: {0}", trainingDataSet.size()));
+        TrainingDataSet trainingDataSet = mTrainingDataService.getNormalizedDataSet();
+        final List<DataSet> split = Arrays.asList(trainingDataSet.split(0.03, 0.97));
         split.forEach(m -> System.out.println(MessageFormat.format("split number {0} with {1} entries.", split.indexOf(m), m.size())));
-        final MultiLayerPerceptron multiLayerPerceptron = mPredictionService.prepareNeuralNetwork(split.get(0));
-        IPredictionService.testPredictingMatches(multiLayerPerceptron, split.get(1));
 
+        // todo : add some cases with another learning rate etc. create better method that accepts more parameters like learning rate, rule, etc.
+        final MultiLayerPerceptron multiLayerPerceptron = mPredictionService.prepareMultiLayerPerceptron(split.get(1));
+        IPredictionService.testPredictingMatches(multiLayerPerceptron, split.get(0));
     }
 }
