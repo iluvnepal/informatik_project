@@ -4,7 +4,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-package org.thepanday.informatikproject.application.config.listeners;
+package org.thepanday.informatikproject.application.model.brain.events.listeners;
 
 import org.neuroph.core.events.LearningEvent;
 import org.neuroph.core.events.LearningEventListener;
@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class PredictionEventListener implements LearningEventListener {
+public class LearningRuleListener implements LearningEventListener {
 
     // ------------------------------------------------------------------------
     // constants
     // ------------------------------------------------------------------------
-    private static final Logger LOGGER = LoggerFactory.getLogger(PredictionEventListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LearningRuleListener.class);
     private long mPrintInterval = 50;
     private final AtomicLong mCurrentIteration = new AtomicLong(0);
     // ------------------------------------------------------------------------

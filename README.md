@@ -39,4 +39,6 @@ Data including from only past seasons for single team. e.g. user wants to use av
 - [ ] has the team gotten better or worse comparing average from each individual season.
 - [ ] use of caches could increase performance in case of bigger data volume.
 - [ ] recent games (last five matches) could also be a factor while considering 'Morale' of a team.
-- [ ] using one network that takes all matches. then feeding second network which factors Morale in prediction. 
+- [ ] using one network that takes all matches. then feeding second network which factors Morale in prediction.
+- [ ] improvements in data collected by data analysis can enhance the network a lot. along with using multiple neural networks connected to each other - with
+  the preceding network's output provided as input for succeeding network.

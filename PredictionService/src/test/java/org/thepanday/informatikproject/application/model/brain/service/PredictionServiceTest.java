@@ -38,6 +38,6 @@ class PredictionServiceTest {
 
         // todo : add some cases with another learning rate etc. create better method that accepts more parameters like learning rate, rule, etc.
         final MultiLayerPerceptron multiLayerPerceptron = mPredictionService.prepareMultiLayerPerceptron(split.get(1));
-        IPredictionService.testPredictingMatches(multiLayerPerceptron, split.get(0));
+        mPredictionService.testPredictingMatches(multiLayerPerceptron, split.get(0));
     }
 }

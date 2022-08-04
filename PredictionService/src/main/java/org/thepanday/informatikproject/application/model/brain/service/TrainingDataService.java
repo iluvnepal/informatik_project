@@ -6,11 +6,11 @@
 
 package org.thepanday.informatikproject.application.model.brain.service;
 
-import org.neuroph.util.data.norm.MaxMinNormalizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thepanday.informatikproject.application.model.brain.util.normalizer.MinMaxNormalizer;
 import org.thepanday.informatikproject.common.data.TrainingDataSet;
 import org.thepanday.informatikproject.common.entity.MatchStatEnum;
 import org.thepanday.informatikproject.common.entity.jsonentities.MatchHistory;
@@ -73,19 +73,29 @@ public class TrainingDataService implements ITrainingDataService {
     private final List<MatchHistory> mMatchHistories = new ArrayList<>();
 
     private Map<String, String> mTitleToId = new HashMap<>();
+    private MinMaxNormalizer mCurrentNormalizer;
 
     public TrainingDataService() {
-        mDefaultTeamDetailEntries = getDefaultTeamDetailEntries();
+        mDefaultTeamDetailEntries = this.getDefaultTeamDetailEntries();
         mCurrentTeamDetailEntries = mDefaultTeamDetailEntries;
         this.init();
     }
 
     @Override
     public TrainingDataSet normalizeDataSet(TrainingDataSet dataSet) {
-        MaxMinNormalizer normalizer = new MaxMinNormalizer(dataSet);
-        normalizer.normalize(dataSet);
-
+        if (mCurrentNormalizer == null) {
+            mCurrentNormalizer = new MinMaxNormalizer(dataSet);
+        }
+        mCurrentNormalizer.normalize(dataSet);
         return dataSet;
+    }
+
+    @Override
+    public double[] denormalizeOutput(double[] outputVector) {
+        if (mCurrentNormalizer == null) {
+            throw new IllegalStateException("No normalizers have been initialized yet.");
+        }
+        return mCurrentNormalizer.denormalizeOutput(outputVector);
     }
 
     @Override

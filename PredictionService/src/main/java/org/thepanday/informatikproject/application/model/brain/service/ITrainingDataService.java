@@ -16,6 +16,8 @@ public interface ITrainingDataService {
 
     public TrainingDataSet normalizeDataSet(TrainingDataSet dataSet);
 
+    double[] denormalizeOutput(double[] outputVector);
+
     /**
      * Fetch teams data from www.understat.com and map data to {@link TeamDetailEntries}
      *
