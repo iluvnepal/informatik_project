@@ -15,17 +15,17 @@ import java.util.Set;
 /**
  * Contains team
  */
-public class TeamDetailEntries {
+public class TeamMatchesContainer {
 
     /**
      * Key is the team id.
      */
-    private Map<String, TeamDetail> mTeamEntriesMap;
+    private Map<String, TeamMatchesDetail> mTeamEntriesMap;
 
     @JsonCreator
-    public TeamDetailEntries(
+    public TeamMatchesContainer(
         @JsonProperty()
-        final Map<String, TeamDetail> mTeamEntriesMap) {
+        final Map<String, TeamMatchesDetail> mTeamEntriesMap) {
         this.mTeamEntriesMap = mTeamEntriesMap;
     }
 
@@ -33,15 +33,15 @@ public class TeamDetailEntries {
      * Add entries from new container provided as parameter (likely from new page url) to pre-existing teamEntry.
      * @param container
      */
-    public void addToEntries(TeamDetailEntries container) {
-        final Set<Map.Entry<String, TeamDetail>> teamEntrySet = container
+    public void addToEntries(TeamMatchesContainer container) {
+        final Set<Map.Entry<String, TeamMatchesDetail>> teamEntrySet = container
             .getTeamEntriesMap()
             .entrySet();
-        for (Map.Entry<String, TeamDetail> stringTeamDetailEntry : teamEntrySet) {
+        for (Map.Entry<String, TeamMatchesDetail> stringTeamDetailEntry : teamEntrySet) {
             final String teamId = stringTeamDetailEntry.getKey();
             if (mTeamEntriesMap.containsKey(teamId)) {
-                final TeamDetail teamDetail = mTeamEntriesMap.get(teamId);
-                teamDetail
+                final TeamMatchesDetail teamMatchesDetail = mTeamEntriesMap.get(teamId);
+                teamMatchesDetail
                     .getHistory()
                     .addAll(stringTeamDetailEntry
                                 .getValue()
@@ -52,11 +52,11 @@ public class TeamDetailEntries {
         }
     }
 
-    public Map<String, TeamDetail> getTeamEntriesMap() {return this.mTeamEntriesMap;}
+    public Map<String, TeamMatchesDetail> getTeamEntriesMap() {return this.mTeamEntriesMap;}
 
-    public TeamDetail getTeamDetailForTeam(String teamId) {
+    public TeamMatchesDetail getTeamDetailForTeam(String teamId) {
         return mTeamEntriesMap.get(teamId);
     }
 
-    public void setTeamEntriesMap(Map<String, TeamDetail> teamEntriesMap) {this.mTeamEntriesMap = teamEntriesMap; }
+    public void setTeamEntriesMap(Map<String, TeamMatchesDetail> teamEntriesMap) {this.mTeamEntriesMap = teamEntriesMap; }
 }

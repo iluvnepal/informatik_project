@@ -20,39 +20,44 @@ import java.util.List;
 public class MatchHistoryUtility {
 
     /**
-     * Cherry picks home and away team match statistics and merges them into one history
+     * Cherry-picks home and away team match statistics and merges them into one history
      *
      * @param homeTeamAverage
      * @param awayTeamAverage
      * @return
      */
     public static MatchHistory mergeMatchHistoriesToInputData(MatchHistory homeTeamAverage, MatchHistory awayTeamAverage) {
-        final MatchHistory m = new MatchHistory();
-        m.setHA("h");
-        m.setXG(homeTeamAverage.getXG());
-        m.setNpxG(homeTeamAverage.getNpxG());
-        m.setPpda(homeTeamAverage.getPpda());
-        m.setDeep(homeTeamAverage.getDeep());
+        final MatchHistory matchHistory = new MatchHistory();
+        matchHistory.setHA("h");
+        matchHistory.setXG(homeTeamAverage.getXG());
+        matchHistory.setNpxG(homeTeamAverage.getNpxG());
+        matchHistory.setPpda(homeTeamAverage.getPpda());
+        matchHistory.setDeep(homeTeamAverage.getDeep());
         // set away team stats
-        m.setXGA(awayTeamAverage.getXG());
-        m.setNpxGA(awayTeamAverage.getNpxG());
-        m.setPpdaAllowed(awayTeamAverage.getPpda());
-        m.setDeepAllowed(awayTeamAverage.getDeep());
-        return m;
+        matchHistory.setXGA(awayTeamAverage.getXG());
+        matchHistory.setNpxGA(awayTeamAverage.getNpxG());
+        matchHistory.setPpdaAllowed(awayTeamAverage.getPpda());
+        matchHistory.setDeepAllowed(awayTeamAverage.getDeep());
+        return matchHistory;
     }
 
     public static TrainingData convertMatchHistoryToTrainingData(MatchHistory history) {
         final TrainingData trainingData = new TrainingData(TrainingDataService.INPUT_SIZE, TrainingDataService.OUTPUT_SIZE);
-        final ArrayList<Double> dataRow = new ArrayList<>();
-        for (MatchStatEnum includedParameter : TrainingDataService.INCLUDED_PARAMETERS) {
-            dataRow.add(resolveStringsToDouble(includedParameter, history.get(includedParameter)));
-        }
+        final ArrayList<Double> dataRow = MatchHistoryUtility.getDoublesFromHistory(history);
         trainingData.setDataRow(dataRow);
         return trainingData;
     }
 
+    private static ArrayList<Double> getDoublesFromHistory(MatchHistory history) {
+        final ArrayList<Double> dataRow = new ArrayList<>();
+        for (MatchStatEnum includedParameter : TrainingDataService.IncludedParameters) {
+            dataRow.add(MatchHistoryUtility.resolveStringsToDouble(includedParameter, history.get(includedParameter)));
+        }
+        return dataRow;
+    }
+
     public static MatchHistory getAverageMatchHistory(MatchHistory historyA, MatchHistory historyB) {
-        // todo: use neuroph's normalizer tools to get mean. When the convertion of match history to training data is done, can be done.
+        // todo: use neuroph's normalizer tools to get mean. When the conversion of match history to training data is done, can be done.
         return null;
     }
 
@@ -72,12 +77,17 @@ public class MatchHistoryUtility {
         if (statEnum == MatchStatEnum.HOME_AWAY) {
             return "h".equals(value.toString()) ? 1 : 0;
         }
+        if (statEnum == MatchStatEnum.RESULT) {
+            switch (value.toString()) {
+                case "l":
+                    return 0;
+                case "d":
+                    return 0.5;
+                case "w":
+                    return 1;
+            }
+        }
         return value == null ? 0 : Double.parseDouble(value.toString());
-    }
-
-    public static MatchHistory normaliseMatchHistory(List<MatchHistory> matchHistories) {
-        // todo
-        return null;
     }
 
 }

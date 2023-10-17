@@ -6,20 +6,22 @@
 
 package org.thepanday.informatikproject.application.model.brain.service;
 
-import org.neuroph.core.data.DataSet;
-import org.neuroph.core.data.DataSetRow;
-import org.neuroph.nnet.MultiLayerPerceptron;
-import org.neuroph.nnet.learning.MomentumBackpropagation;
-import org.neuroph.util.TransferFunctionType;
+import deepnetts.eval.Evaluators;
+import deepnetts.net.FeedForwardNetwork;
+import deepnetts.net.NeuralNetwork;
+import deepnetts.net.layers.activation.ActivationType;
+import deepnetts.net.loss.LossType;
+import deepnetts.net.train.BackpropagationTrainer;
+import deepnetts.util.FileIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.thepanday.informatikproject.application.model.brain.events.listeners.LearningRuleListener;
 
-import java.text.DecimalFormat;
-import java.text.MessageFormat;
-import java.util.Arrays;
+import javax.visrec.ml.data.DataSet;
+import javax.visrec.ml.eval.EvaluationMetrics;
+import java.io.File;
+import java.io.IOException;
 
 @Service
 public class PredictionService implements IPredictionService {
@@ -28,50 +30,47 @@ public class PredictionService implements IPredictionService {
     @Autowired
     private ITrainingDataService mTrainingDataService;
 
-    public void createNeuralNetwork(TransferFunctionType transferFunctionType, int... neurons) {
+    public void createNeuralNetwork() {
         //todo
     }
 
     @Override
-    public MultiLayerPerceptron prepareMultiLayerPerceptron(DataSet learningDataset) {
-        // create multi layer perceptron
+    public FeedForwardNetwork getNeuralNetwork(DataSet dataSet) {
         // todo: create tests that change these parameters and test which is the best parameter
-        MultiLayerPerceptron neuralNet = new MultiLayerPerceptron(TransferFunctionType.SIGMOID,
-                                                                  TrainingDataService.INPUT_SIZE,
-                                                                  3,
-                                                                  TrainingDataService.OUTPUT_SIZE);
-        // set learning parametars
-        MomentumBackpropagation learningRule = (MomentumBackpropagation) neuralNet.getLearningRule();
-        learningRule.setLearningRate(0.2);
-        learningRule.setMomentum(0.2);
-        learningRule.setMaxError(0.008);
-        learningRule.setMaxIterations(300);
-        learningRule.addListener(new LearningRuleListener());
+        // create instance of multi addLayer percetpron using builder
+        FeedForwardNetwork neuralNet = FeedForwardNetwork
+            .builder()
+            .addInputLayer(TrainingDataService.INPUT_SIZE)
+            .addFullyConnectedLayer(10, ActivationType.SIGMOID)     // sigmoid is best for prediction
+            .addOutputLayer(2, ActivationType.SIGMOID)
+            .lossFunction(LossType.MEAN_SQUARED_ERROR)
+            .build();
 
-        // learn the training set
-        System.out.println("Training neural network...");
-        neuralNet.learn(learningDataset);
-        System.out.println("Done!");
+        // create backpropagation trainer
+        BackpropagationTrainer trainer = neuralNet.getTrainer();
+        trainer.setMaxError(0.036f);
+        trainer.setMaxEpochs(3000);
+        trainer.setBatchMode(true);
+        trainer.setLearningRate(0.2f);
 
-        // test perceptron
+        LOGGER.info("training neural net started..");
+        neuralNet.train(dataSet);
+        LOGGER.info("training neural net done.");
+
+        final EvaluationMetrics em = Evaluators.evaluateClassifier(neuralNet, dataSet);
+        System.out.println(em);
         return neuralNet;
     }
 
-    @Override
-    public void testPredictingMatches(MultiLayerPerceptron nnet, DataSet dset) {
-        for (DataSetRow trainingElement : dset.getRows()) {
-            nnet.setInput(trainingElement.getInput());
-            nnet.calculate();
-            LOGGER.info(MessageFormat.format("Output: {0}, {1} desired output, network error: {2}",
-                                             Arrays.toString(Arrays
-                                                                 .stream(mTrainingDataService.denormalizeOutput(nnet.getOutput()))
-                                                                 .mapToObj(d -> new DecimalFormat("0.00").format(d))
-                                                                 .toArray()),
-                                             Arrays.toString(mTrainingDataService.denormalizeOutput(trainingElement.getDesiredOutput())),
-                                             nnet
-                                                 .getLearningRule()
-                                                 .getTotalNetworkError()));
+    public NeuralNetwork loadNeuralNetworkFromFile(String fileName) {
+        try {
+            return FileIO.createFromFile(new File(fileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     @Override

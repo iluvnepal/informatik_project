@@ -6,16 +6,17 @@
 
 package org.thepanday.informatikproject.common.entity.jsonentities;
 
-import org.neuroph.core.data.DataSetRow;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TrainingData {
 
     private List<Double> mInput = new ArrayList<>();
     private List<Double> mOutput = new ArrayList<>();
+
+    private List<Double> mDataRow;
     private final int mInputSize;
     private final int mOutputSize;
 
@@ -25,6 +26,7 @@ public class TrainingData {
     }
 
     public void setDataRow(List<Double> dataRow) {
+        mDataRow = dataRow;
         if (dataRow.size() != mInputSize + mOutputSize) {
             throw new IllegalArgumentException(MessageFormat.format("Size of provided data row ({0}) is different than current training data row size ({1})",
                                                                     dataRow.size(),
@@ -60,18 +62,7 @@ public class TrainingData {
         this.mOutput = output;
     }
 
-    public static DataSetRow toDataSetRow(TrainingData trainingData) {
-        final DataSetRow dataSetRow = new DataSetRow(trainingData
-                                                         .getInput()
-                                                         .stream()
-                                                         .mapToDouble(Double::doubleValue)
-                                                         .toArray());
-        dataSetRow.setDesiredOutput(trainingData
-                                        .getOutput()
-                                        .stream()
-                                        .mapToDouble(Double::doubleValue)
-                                        .toArray());
-
-        return dataSetRow;
+    public List<Double> getDataRow() {
+        return mDataRow;
     }
 }

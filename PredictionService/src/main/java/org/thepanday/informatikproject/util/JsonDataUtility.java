@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetailEntries;
+import org.thepanday.informatikproject.common.entity.jsonentities.TeamMatchesContainer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -33,11 +33,11 @@ public class JsonDataUtility {
     public static final String DEFAULT_TRAINING_DATA = "default_training_data.txt";
     public static final String ALL_DATA = "json/default_team_entries.json";
 
-    public static TeamDetailEntries teamDetailEntriesJsonToObject(String jsonAsString) {
+    public static TeamMatchesContainer teamDetailEntriesJsonToObject(String jsonAsString) {
         var o = new ObjectMapper();
 
         try {
-            return o.readValue(jsonAsString, TeamDetailEntries.class);
+            return o.readValue(jsonAsString, TeamMatchesContainer.class);
         } catch (JsonProcessingException e) {
             LOGGER.error("Could not parse json string.");
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class JsonDataUtility {
         return null;
     }
 
-    public static boolean teamDetailEntriesObjectToJsonFile(String fileName, TeamDetailEntries pageContainer) {
+    public static boolean teamDetailEntriesObjectToJsonFile(String fileName, TeamMatchesContainer pageContainer) {
         var o = new ObjectMapper();
         try {
             final BufferedWriter output = new BufferedWriter(new FileWriter(fileName, false));

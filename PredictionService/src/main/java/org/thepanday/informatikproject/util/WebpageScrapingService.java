@@ -13,8 +13,8 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetail;
-import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetailEntries;
+import org.thepanday.informatikproject.common.entity.jsonentities.TeamMatchesDetail;
+import org.thepanday.informatikproject.common.entity.jsonentities.TeamMatchesContainer;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,16 +41,16 @@ public class WebpageScrapingService {
         this.populateLeagueTeamsMap();
     }
 
-    public TeamDetailEntries scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer() {
-        final TeamDetailEntries teamDetailEntries = new TeamDetailEntries(new HashMap<>());
+    public TeamMatchesContainer scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer() {
+        final TeamMatchesContainer teamMatchesContainer = new TeamMatchesContainer(new HashMap<>());
         LOGGER.info("Fetching data from:");
         for (String pageUrl : this.getPageUrls()) {
             LOGGER.info("Scraping page: {}", pageUrl);
-            final TeamDetailEntries containerToAdd = this.pageToTeamsDataContainer(pageUrl);
-            teamDetailEntries.addToEntries(containerToAdd);
+            final TeamMatchesContainer containerToAdd = this.pageToTeamsDataContainer(pageUrl);
+            teamMatchesContainer.addToEntries(containerToAdd);
         }
         LOGGER.info("Fetching data completed.");
-        return teamDetailEntries;
+        return teamMatchesContainer;
     }
 
     private List<String> getPageUrls() {
@@ -64,7 +64,7 @@ public class WebpageScrapingService {
         return pageUrls;
     }
 
-    protected TeamDetailEntries pageToTeamsDataContainer(String url) {
+    protected TeamMatchesContainer pageToTeamsDataContainer(String url) {
         final HtmlPage page = this.getPage(url);
 
         final String pageAsString = this.decodeHex(page.asXml());
@@ -84,9 +84,9 @@ public class WebpageScrapingService {
         final String year = "2020";
         for (String league : LEAGUES) {
             String pageUrl = BASE_URL + "/" + league + "/" + year;
-            final TeamDetailEntries yearTeamData = pageToTeamsDataContainer(pageUrl);
+            final TeamMatchesContainer yearTeamData = pageToTeamsDataContainer(pageUrl);
             List<String> leagueTeams = new ArrayList<>();
-            for (Map.Entry<String, TeamDetail> idToEntry : yearTeamData
+            for (Map.Entry<String, TeamMatchesDetail> idToEntry : yearTeamData
                 .getTeamEntriesMap()
                 .entrySet()) {
                 leagueTeams.add(idToEntry

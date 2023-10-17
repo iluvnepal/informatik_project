@@ -6,14 +6,13 @@
 
 package org.thepanday.informatikproject.application.model.brain.service;
 
-import org.neuroph.core.data.DataSet;
-import org.neuroph.nnet.MultiLayerPerceptron;
+import deepnetts.net.FeedForwardNetwork;
+
+import javax.visrec.ml.data.DataSet;
 
 public interface IPredictionService {
 
-    MultiLayerPerceptron prepareMultiLayerPerceptron(DataSet trainingDataSet);
-
-    void testPredictingMatches(MultiLayerPerceptron nnet, DataSet dset);
+    FeedForwardNetwork getNeuralNetwork(DataSet trainingDataSet);
 
     /**
      * Connect to web scraping service and save training data in a file.

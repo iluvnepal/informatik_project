@@ -20,21 +20,21 @@ import java.util.Map;
 public class FormService implements IFormService {
 
     @Autowired
-    private WebpageScrapingService dataParser;
+    private WebpageScrapingService mDataParser;
 
     @Override
     public Map<String, List<String>> getTeamsForAllLeague() {
-        if (dataParser
+        if (mDataParser
             .getLeagueToTeams()
             .isEmpty()) {
-            dataParser.populateLeagueTeamsMap();
+            mDataParser.populateLeagueTeamsMap();
         }
-        return dataParser.getLeagueToTeams();
+        return mDataParser.getLeagueToTeams();
     }
 
     @Override
     public String[] getLeagues() {
-        return dataParser.getLeagues();
+        return mDataParser.getLeagues();
     }
 
 }

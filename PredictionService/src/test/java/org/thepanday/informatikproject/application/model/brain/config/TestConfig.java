@@ -8,6 +8,7 @@ package org.thepanday.informatikproject.application.model.brain.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.thepanday.informatikproject.application.model.brain.service.IPredictionService;
 import org.thepanday.informatikproject.application.model.brain.service.ITrainingDataService;
 import org.thepanday.informatikproject.application.model.brain.service.PredictionService;

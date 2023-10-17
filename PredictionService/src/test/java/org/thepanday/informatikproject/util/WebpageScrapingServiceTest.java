@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.thepanday.informatikproject.application.model.brain.config.TestConfig;
-import org.thepanday.informatikproject.common.entity.jsonentities.TeamDetailEntries;
+import org.thepanday.informatikproject.common.entity.jsonentities.TeamMatchesContainer;
 
 import java.io.IOException;
 
@@ -27,14 +27,14 @@ class WebpageScrapingServiceTest {
                                                                                                .getClass()
                                                                                                .getClassLoader()
                                                                                                .getResourceAsStream(JsonDataUtility.ALL_DATA));
-        final TeamDetailEntries teamEntries = JsonDataUtility.teamDetailEntriesJsonToObject(jsonStringFromResource);
+        final TeamMatchesContainer teamEntries = JsonDataUtility.teamDetailEntriesJsonToObject(jsonStringFromResource);
         assert (teamEntries.getTeamEntriesMap() != null);
     }
 
     @Test
     void populateLeagueTeamsMap() {
-        final TeamDetailEntries teamDetailEntries = mParser.scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer();
-        JsonDataUtility.teamDetailEntriesObjectToJsonFile("all_data_as_json.json", teamDetailEntries);
+        final TeamMatchesContainer teamMatchesContainer = mParser.scrapeAllMatchesFromAllLeaguesAndYearsToTeamsDataContainer();
+        JsonDataUtility.teamDetailEntriesObjectToJsonFile("all_data_as_json.json", teamMatchesContainer);
     }
 
     @Test

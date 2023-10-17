@@ -6,19 +6,29 @@
 
 package org.thepanday.informatikproject.common.data;
 
-import org.neuroph.core.data.DataSet;
+import deepnetts.data.DataSets;
 import org.thepanday.informatikproject.common.entity.jsonentities.TrainingData;
 
+import javax.visrec.ml.data.DataSet;
+import java.io.IOException;
 import java.util.List;
 
-public class TrainingDataSet extends DataSet {
+public class TrainingDataSet {
 
     private final List<TrainingData> mTrainingDataList;
+    private final int mNumInputs;
+    private final int mNumOutputs;
 
-    public TrainingDataSet(List<TrainingData> trainingDataList, int inputSize, int outputSize) {
-        super(inputSize, outputSize);
+    public DataSet datasetFromCsv(String fileName) throws IOException {
+        return DataSets.readCsv(fileName, mNumInputs, mNumOutputs, true);
+    }
+
+    public TrainingDataSet(List<TrainingData> trainingDataList, int numInputs, int numOutputs) {
+
         mTrainingDataList = trainingDataList;
         init();
+        mNumInputs = numInputs;
+        mNumOutputs = numOutputs;
     }
 
     private void init() {
@@ -33,7 +43,6 @@ public class TrainingDataSet extends DataSet {
                 .stream()
                 .mapToDouble(Double::doubleValue)
                 .toArray();
-            super.add(input, output);
         });
     }
 }
